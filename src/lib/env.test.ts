@@ -1,4 +1,5 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { ContentError } from "@/content/errors";
 import { getEnv } from "./env";
 
 const saved = { ...process.env };
@@ -8,6 +9,7 @@ beforeEach(() => {
   delete process.env.WP_GRAPHQL_URL;
 });
 afterEach(() => {
+  vi.unstubAllEnvs();
   process.env = saved;
 });
 
@@ -25,5 +27,59 @@ describe("getEnv", () => {
     process.env.CONTENT_SOURCE = "wordpress";
     process.env.WP_GRAPHQL_URL = "https://example.com/graphql";
     expect(getEnv().wpUrl).toBe("https://example.com/graphql");
+  });
+});
+
+describe("getEnv siteUrl", () => {
+  beforeEach(() => {
+    vi.stubEnv("SITE_URL", "");
+    vi.stubEnv("VERCEL_PROJECT_PRODUCTION_URL", "");
+  });
+
+  const configError = (fn: () => unknown, message: RegExp) => {
+    let err: unknown;
+    try {
+      fn();
+    } catch (e) {
+      err = e;
+    }
+    expect(err).toBeInstanceOf(ContentError);
+    expect(err).toMatchObject({ code: "config" });
+    expect((err as Error).message).toMatch(message);
+  };
+
+  it("uses SITE_URL when set, in any environment", () => {
+    vi.stubEnv("NODE_ENV", "production");
+    vi.stubEnv("SITE_URL", "https://example.com");
+    vi.stubEnv("VERCEL_PROJECT_PRODUCTION_URL", "example.vercel.app");
+    expect(getEnv().siteUrl).toBe("https://example.com");
+  });
+
+  it("falls back to the Vercel production domain", () => {
+    vi.stubEnv("NODE_ENV", "production");
+    vi.stubEnv("VERCEL_PROJECT_PRODUCTION_URL", "example.vercel.app");
+    expect(getEnv().siteUrl).toBe("https://example.vercel.app");
+  });
+
+  it("defaults to localhost outside production", () => {
+    vi.stubEnv("NODE_ENV", "development");
+    expect(getEnv().siteUrl).toBe("http://localhost:3000");
+    vi.stubEnv("NODE_ENV", "test");
+    expect(getEnv().siteUrl).toBe("http://localhost:3000");
+  });
+
+  it("throws a config error in production when neither is set", () => {
+    vi.stubEnv("NODE_ENV", "production");
+    configError(() => getEnv(), /SITE_URL is required in production/);
+  });
+
+  it("throws a config error for a value that is not a URL", () => {
+    vi.stubEnv("SITE_URL", "example.com");
+    configError(() => getEnv(), /SITE_URL must be an absolute URL/);
+  });
+
+  it("throws a config error for a non-http URL", () => {
+    vi.stubEnv("SITE_URL", "ftp://example.com");
+    configError(() => getEnv(), /SITE_URL must use http or https/);
   });
 });

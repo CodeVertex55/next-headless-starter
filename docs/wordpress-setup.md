@@ -51,7 +51,7 @@ Menu links written against the WordPress home URL are turned into paths on the N
 | Variable | Value |
 | --- | --- |
 | `CONTENT_SOURCE` | `wordpress` |
-| `SITE_URL` | The public URL of the Next.js site, for example `https://example.com` |
+| `SITE_URL` | The public URL of the Next.js site, for example `https://example.com`. Required in production; on Vercel it falls back to the production domain |
 | `WP_GRAPHQL_URL` | Your WPGraphQL endpoint, usually `https://cms.example.com/graphql` |
 | `WP_APP_USER` | The WordPress user the application password belongs to |
 | `WP_APP_PASSWORD` | The application password, used for draft preview only |

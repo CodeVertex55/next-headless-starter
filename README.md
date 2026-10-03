@@ -55,15 +55,15 @@ add_action( 'after_setup_theme', function () {
 
 Set these in `.env.local` for development, or in your host's settings for production.
 
-| Variable            | Required         | Purpose                                                                                                         |
-| ------------------- | ---------------- | --------------------------------------------------------------------------------------------------------------- |
-| `CONTENT_SOURCE`    | No               | `fixture` (default) or `wordpress`                                                                              |
-| `SITE_URL`          | No               | Public URL of this site. Drives canonical URLs, sitemap, robots and schema. Defaults to `http://localhost:3000` |
-| `WP_GRAPHQL_URL`    | With `wordpress` | WPGraphQL endpoint, for example `https://cms.example.com/graphql`                                               |
-| `WP_APP_USER`       | For preview      | WordPress user that owns the application password                                                               |
-| `WP_APP_PASSWORD`   | For preview      | Application password                                                                                            |
-| `PREVIEW_SECRET`    | For preview      | Shared secret in preview links                                                                                  |
-| `REVALIDATE_SECRET` | For revalidation | Bearer token WordPress sends to `/api/revalidate`                                                               |
+| Variable            | Required         | Purpose                                                                                                                                                                                                                                                                                |
+| ------------------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CONTENT_SOURCE`    | No               | `fixture` (default) or `wordpress`                                                                                                                                                                                                                                                     |
+| `SITE_URL`          | In production    | Public URL of this site. Drives canonical URLs, sitemap, robots and schema. On Vercel it falls back to `https://` plus `VERCEL_PROJECT_PRODUCTION_URL`. Outside production it defaults to `http://localhost:3000`. A production build or server with neither fails with a config error |
+| `WP_GRAPHQL_URL`    | With `wordpress` | WPGraphQL endpoint, for example `https://cms.example.com/graphql`                                                                                                                                                                                                                      |
+| `WP_APP_USER`       | For preview      | WordPress user that owns the application password                                                                                                                                                                                                                                      |
+| `WP_APP_PASSWORD`   | For preview      | Application password                                                                                                                                                                                                                                                                   |
+| `PREVIEW_SECRET`    | For preview      | Shared secret in preview links                                                                                                                                                                                                                                                         |
+| `REVALIDATE_SECRET` | For revalidation | Bearer token WordPress sends to `/api/revalidate`                                                                                                                                                                                                                                      |
 
 A minimal WordPress setup:
 
@@ -203,7 +203,7 @@ The WPGraphQL Smart Cache plugin is an alternative way to decide when to call th
 2. Set the environment variables from the table above.
 3. Deploy.
 
-Set `SITE_URL` to your production URL. Point the PHP snippets in WordPress at the same URL.
+Set `SITE_URL` to your production URL. If you leave it unset, the site uses `https://` plus the `VERCEL_PROJECT_PRODUCTION_URL` that Vercel provides. Point the PHP snippets in WordPress at the same URL.
 
 ## Project structure
 
