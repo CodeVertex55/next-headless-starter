@@ -8,7 +8,7 @@ import type {
   PostSummary,
   SiteSettings,
 } from "@/content/types";
-import { getEnv } from "@/lib/env";
+import { SITE_URL } from "@/lib/site";
 import { sanitizeHtml } from "@/lib/html";
 import site from "./data/site.json";
 import menus from "./data/menus.json";
@@ -59,7 +59,7 @@ export function createFixtureSource(): ContentSource {
 
   return {
     async getSiteSettings(): Promise<SiteSettings> {
-      return { ...site, url: getEnv().siteUrl };
+      return { ...site, url: SITE_URL };
     },
     async getMenu(location: MenuLocation): Promise<Menu> {
       return { location, items: (menus as Record<MenuLocation, MenuItem[]>)[location] ?? [] };
