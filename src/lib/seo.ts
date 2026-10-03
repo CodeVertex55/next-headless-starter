@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import type { SeoFields, SiteSettings, Image } from "@/content/types";
+import type { Page, SeoFields, SiteSettings, Image } from "@/content/types";
 
 export function absoluteUrl(path: string, base: string) {
   return (
@@ -53,6 +53,21 @@ export function buildMetadata({
       description: seo.description,
     },
   };
+}
+
+/**
+ * The document title for the front page. The root route shares a segment with the layout, so the
+ * layout's title template does not apply to it. Without an SEO plugin the title is just the page
+ * title (often "Home"), so the site name stands in for it. A plugin title is already complete, and
+ * a custom title keeps going through the template.
+ */
+export function homeTitle(
+  page: Pick<Page, "title" | "seo">,
+  settings: Pick<SiteSettings, "name">,
+): Exclude<Metadata["title"], null | undefined> {
+  if (page.seo.absoluteTitle) return { absolute: page.seo.title };
+  if (page.seo.title === page.title) return { absolute: settings.name };
+  return page.seo.title;
 }
 
 export function websiteJsonLd(s: SiteSettings) {

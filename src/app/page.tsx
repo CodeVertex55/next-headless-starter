@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getContentSource } from "@/content/source";
 import { loadPage } from "@/app/_lib/loaders";
-import { buildMetadata } from "@/lib/seo";
+import { buildMetadata, homeTitle } from "@/lib/seo";
 import { Prose } from "@/components/Prose";
 
 const HOME_SLUG = ["home"];
@@ -11,7 +11,10 @@ export async function generateMetadata(): Promise<Metadata> {
     loadPage(HOME_SLUG),
     (await getContentSource()).getSiteSettings(),
   ]);
-  return buildMetadata({ seo: page.seo, path: "/", settings });
+  return {
+    ...buildMetadata({ seo: page.seo, path: "/", settings }),
+    title: homeTitle(page, settings),
+  };
 }
 
 export default async function Home() {

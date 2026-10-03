@@ -5,6 +5,7 @@ import {
   breadcrumbJsonLd,
   absoluteUrl,
   organizationJsonLd,
+  homeTitle,
 } from "./seo";
 
 const seo = {
@@ -104,5 +105,27 @@ describe("seo", () => {
       settings,
     );
     expect(ld.itemListElement[1]).toMatchObject({ position: 2, item: "https://example.com/about" });
+  });
+});
+
+describe("homeTitle", () => {
+  const page = { title: "Home", seo };
+
+  it("keeps a title from the SEO plugin as an absolute title", () => {
+    const withPlugin = {
+      ...page,
+      seo: { ...seo, title: "Northfield | Websites", absoluteTitle: true },
+    };
+    expect(homeTitle(withPlugin, settings)).toEqual({ absolute: "Northfield | Websites" });
+  });
+
+  it("keeps a custom title so the title template applies to it", () => {
+    const custom = { ...page, seo: { ...seo, title: "Websites that are finished" } };
+    expect(homeTitle(custom, settings)).toBe("Websites that are finished");
+  });
+
+  it("uses the site name, without the template, when the title is just the page title", () => {
+    const bare = { ...page, seo: { ...seo, title: "Home" } };
+    expect(homeTitle(bare, settings)).toEqual({ absolute: "Site" });
   });
 });
