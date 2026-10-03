@@ -51,6 +51,10 @@ add_action( 'after_setup_theme', function () {
 } );
 ```
 
+### Front page
+
+Go to Settings > Reading, choose "A static page" under "Your homepage displays", and set Homepage to the page you want as the home page. Whatever its slug, WordPress gives that page the URI `/`, and the starter serves it at `/`. Without one, `/` shows a 404 unless a page has the slug `home`.
+
 ### Environment
 
 Set these in `.env.local` for development, or in your host's settings for production.

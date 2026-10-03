@@ -73,6 +73,8 @@ If you want to check PHP syntax, run the PHP bundled with XAMPP. The `-n` flag s
 
 The contract suite expects at least one published page, one published post and a primary menu with an item. Create them in wp-admin.
 
+Then set the front page. Go to Settings > Reading, choose "A static page" under "Your homepage displays", and set Homepage to the page you want as the home page. Whatever its slug, WordPress gives that page the URI `/`, and the starter serves it at `/`.
+
 ## 9. Create an application password
 
 Go to Users > Profile > Application Passwords, enter a name and click Add New Application Password. Copy the password. WordPress shows it once.
@@ -92,6 +94,8 @@ REVALIDATE_SECRET=another-long-random-string
 ```
 
 Start the site with `npm run dev`.
+
+Next.js normally refuses to optimise images from a private address such as `localhost`, so when `WP_GRAPHQL_URL` points at `localhost`, `127.0.0.1` or `[::1]` outside production, `next.config.ts` sets `images.dangerouslyAllowLocalIP` and featured images load from XAMPP.
 
 ## 11. Run the contract suite
 

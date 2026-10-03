@@ -46,6 +46,10 @@ Then go to Appearance > Menus, build a menu for each location and assign it. The
 
 Menu links written against the WordPress home URL are turned into paths on the Next.js site.
 
+## Front page
+
+Go to Settings > Reading, choose "A static page" under "Your homepage displays", and set Homepage to the page you want as the home page. Whatever its slug, WordPress gives that page the URI `/`, and the starter serves it at `/`. Without one, `/` shows a 404 unless a page has the slug `home`.
+
 ## Environment values
 
 | Variable | Value |
