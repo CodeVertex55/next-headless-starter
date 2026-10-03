@@ -82,7 +82,7 @@ The preview URL has this format:
 
 - `type` is `post` or `page`.
 - `id` is the WordPress database id, a whole number.
-- `slug` may contain letters, digits, hyphens and `/`. Underscores and non-ASCII slugs are rejected.
+- `slug` may contain letters, digits, hyphens, underscores and `/`. Non-ASCII slugs are rejected.
 - A post opens at `/blog/<slug>` and a page at `/<slug>`.
 
 The route enables Next.js draft mode and sets a `preview_id` cookie that names the item and the path it opens at, so that page loads the draft by id. Other pages you visit while previewing show their published versions. Exit preview at `/api/preview/exit`.
@@ -99,8 +99,8 @@ add_filter( 'preview_post_link', function ( $link, $post ) {
 	$slug = 'page' === $post->post_type ? get_page_uri( $post ) : $post->post_name;
 
 	// The preview loads by id, so the slug only has to pass the Next.js check.
-	// Drafts with no slug yet, underscores and non-ASCII slugs fall back to a placeholder.
-	if ( 0 === preg_match( '/^[a-z0-9]+(?:-[a-z0-9]+)*(?:\/[a-z0-9]+(?:-[a-z0-9]+)*)*$/i', (string) $slug ) ) {
+	// Drafts with no slug yet and non-ASCII slugs fall back to a placeholder.
+	if ( 0 === preg_match( '/^[a-z0-9_-]+(?:\/[a-z0-9_-]+)*$/i', (string) $slug ) ) {
 		$slug = 'draft-' . $post->ID;
 	}
 
@@ -120,7 +120,7 @@ Drafts can have an empty slug, and the preview loads by id, so the snippet falls
 
 ## Revalidation
 
-Content is cached for 3600 seconds and tagged. The webhook invalidates by tag, so an edit shows up without waiting an hour.
+Content is cached for 3600 seconds and tagged. The webhook expires the tagged entries at once, so an edit shows up on the next request instead of after an hour, and no visitor is served the stale copy.
 
 Send `POST /api/revalidate` with an `Authorization: Bearer <REVALIDATE_SECRET>` header and a JSON body:
 
@@ -149,7 +149,7 @@ curl -X POST https://your-site.example/api/revalidate \
 
 ### Revalidate on save
 
-This snippet sends the webhook whenever a post or page is saved and public content could have changed:
+This snippet sends the webhook whenever a post or page is saved and public content could have changed. When the save renames the post or moves it to the trash, which makes WordPress append `__trashed` to the slug, it sends a second call for the old slug so that cache entry is purged too:
 
 ```php
 function next_revalidate( $type, $slug = null ) {
@@ -193,6 +193,15 @@ add_action( 'wp_after_insert_post', function ( $post_id, $post, $update, $post_b
 		$slug = $post->post_name;
 	}
 	next_revalidate( $post->post_type, $slug );
+
+	// A rename, or a move to the trash (WordPress appends "__trashed" to the slug), leaves the old
+	// slug cached on the Next.js side, so purge it too.
+	if ( $post_before instanceof WP_Post && '/' !== $slug ) {
+		$old_slug = 'page' === $post->post_type ? get_page_uri( $post_before ) : $post_before->post_name;
+		if ( is_string( $old_slug ) && '' !== $old_slug && $old_slug !== $slug ) {
+			next_revalidate( $post->post_type, $old_slug );
+		}
+	}
 }, 10, 4 );
 ```
 

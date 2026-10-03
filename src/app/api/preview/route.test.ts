@@ -75,6 +75,11 @@ describe("GET /api/preview", () => {
     expect(cookie.toLowerCase()).toContain("samesite=lax");
     expect(cookie).not.toContain("Secure");
   });
+  it("accepts an underscore in a slug", async () => {
+    const res = await GET(req("secret=s&type=post&id=7&slug=a_b"));
+    expect(res.status).toBe(307);
+    expect(res.headers.get("location")).toBe("http://localhost/blog/a_b");
+  });
   it("redirects a nested page slug to its url", async () => {
     const res = await GET(req("secret=s&type=page&id=3&slug=about%2Fteam"));
     expect(res.status).toBe(307);

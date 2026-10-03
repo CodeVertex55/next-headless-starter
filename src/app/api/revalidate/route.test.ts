@@ -85,15 +85,24 @@ describe("POST /api/revalidate", () => {
     const res = await POST(req({ type: "post", slug: "a" }));
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual({ revalidated: ["posts", "post:a"], paths: ["/sitemap.xml"] });
-    expect(revalidateTag).toHaveBeenCalledWith("posts", "max");
-    expect(revalidateTag).toHaveBeenCalledWith("post:a", "max");
+    expect(revalidateTag).toHaveBeenCalledWith("posts", { expire: 0 });
+    expect(revalidateTag).toHaveBeenCalledWith("post:a", { expire: 0 });
     expect(revalidatePath).toHaveBeenCalledWith("/sitemap.xml");
   });
   it("normalises a page URI to its slug", async () => {
     const res = await POST(req({ type: "page", slug: "/about/team/" }));
     expect(res.status).toBe(200);
     expect((await res.json()).revalidated).toEqual(["pages", "page:about/team"]);
-    expect(revalidateTag).toHaveBeenCalledWith("page:about/team", "max");
+    expect(revalidateTag).toHaveBeenCalledWith("page:about/team", { expire: 0 });
+  });
+  it("accepts underscores, including a trashed slug", async () => {
+    const post = await POST(req({ type: "post", slug: "a_b" }));
+    expect(post.status).toBe(200);
+    expect((await post.json()).revalidated).toEqual(["posts", "post:a_b"]);
+    const trashed = await POST(req({ type: "page", slug: "/about__trashed/" }));
+    expect(trashed.status).toBe(200);
+    expect((await trashed.json()).revalidated).toEqual(["pages", "page:about__trashed"]);
+    expect(revalidateTag).toHaveBeenCalledWith("page:about__trashed", { expire: 0 });
   });
   it("maps the front page to page:home", async () => {
     for (const slug of ["/", ""]) {

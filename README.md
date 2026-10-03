@@ -85,7 +85,7 @@ The preview URL looks like this:
 /api/preview?secret=<PREVIEW_SECRET>&type=post|page&id=<WordPress database id>&slug=<slug or nested/page/path>
 ```
 
-The slug may contain letters, digits, hyphens and `/`. Underscores and non-ASCII slugs are rejected. The front page previews at `/` when its slug is `home`. Exit preview at `/api/preview/exit`.
+The slug may contain letters, digits, hyphens, underscores and `/`. Non-ASCII slugs are rejected. The front page previews at `/` when its slug is `home`. Exit preview at `/api/preview/exit`.
 
 Behind a TLS-terminating proxy that forwards plain http, the preview cookie is not marked Secure. Set the proxy to forward the original protocol.
 
@@ -105,8 +105,8 @@ add_filter( 'preview_post_link', function ( $link, $post ) {
 	$slug = 'page' === $post->post_type ? get_page_uri( $post ) : $post->post_name;
 
 	// The preview loads by id, so the slug only has to pass the Next.js check.
-	// Drafts with no slug yet, underscores and non-ASCII slugs fall back to a placeholder.
-	if ( 0 === preg_match( '/^[a-z0-9]+(?:-[a-z0-9]+)*(?:\/[a-z0-9]+(?:-[a-z0-9]+)*)*$/i', (string) $slug ) ) {
+	// Drafts with no slug yet and non-ASCII slugs fall back to a placeholder.
+	if ( 0 === preg_match( '/^[a-z0-9_-]+(?:\/[a-z0-9_-]+)*$/i', (string) $slug ) ) {
 		$slug = 'draft-' . $post->ID;
 	}
 
@@ -124,7 +124,7 @@ add_filter( 'preview_post_link', function ( $link, $post ) {
 
 ## Revalidation
 
-Content is cached for 3600 seconds and tagged. The webhook invalidates by tag.
+Content is cached for 3600 seconds and tagged. The webhook expires the tagged entries at once, so the next request waits for fresh content instead of being served the stale copy.
 
 ```text
 POST /api/revalidate
@@ -139,7 +139,7 @@ Authorization: Bearer <REVALIDATE_SECRET>
 - `slug` is optional. Page slugs are the WordPress URI without edge slashes. `/` is the front page and maps to the home page.
 - The response is `{ "revalidated": [tags], "paths": ["/sitemap.xml"] }` when pages or posts were touched.
 
-Add this to a must-use plugin to send the webhook whenever a post or page is saved:
+Add this to a must-use plugin to send the webhook whenever a post or page is saved. When a save renames a post or moves it to the trash, it also purges the old slug:
 
 ```php
 function next_revalidate( $type, $slug = null ) {
@@ -183,6 +183,15 @@ add_action( 'wp_after_insert_post', function ( $post_id, $post, $update, $post_b
 		$slug = $post->post_name;
 	}
 	next_revalidate( $post->post_type, $slug );
+
+	// A rename, or a move to the trash (WordPress appends "__trashed" to the slug), leaves the old
+	// slug cached on the Next.js side, so purge it too.
+	if ( $post_before instanceof WP_Post && '/' !== $slug ) {
+		$old_slug = 'page' === $post->post_type ? get_page_uri( $post_before ) : $post_before->post_name;
+		if ( is_string( $old_slug ) && '' !== $old_slug && $old_slug !== $slug ) {
+			next_revalidate( $post->post_type, $old_slug );
+		}
+	}
 }, 10, 4 );
 ```
 

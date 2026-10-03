@@ -3,7 +3,8 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 import { getEnv } from "@/lib/env";
 
-const SLUG_CHARS = /^[a-z0-9/-]*$/i;
+// Underscores are allowed because WordPress renames a trashed post's slug to "<slug>__trashed".
+const SLUG_CHARS = /^[a-z0-9_/-]*$/i;
 const SITEMAP_PATH = "/sitemap.xml";
 const UNKNOWN_TYPE = "type must be one of post, page, menu, site, all";
 
@@ -62,7 +63,9 @@ export async function POST(request: Request) {
   }
 
   const tags = build(slug);
-  for (const tag of tags) revalidateTag(tag, "max");
+  // A webhook means the content changed now, so expire immediately rather than serve stale data
+  // while revalidating: the next request for a tagged entry waits for fresh content.
+  for (const tag of tags) revalidateTag(tag, { expire: 0 });
 
   // Content lists feed the sitemap, so refresh it whenever pages or posts change.
   const paths = tags.some((t) => t === "pages" || t === "posts") ? [SITEMAP_PATH] : [];

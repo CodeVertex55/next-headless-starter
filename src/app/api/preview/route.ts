@@ -3,7 +3,8 @@ import { draftMode } from "next/headers";
 import { NextResponse } from "next/server";
 import { getEnv } from "@/lib/env";
 
-const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*(?:\/[a-z0-9]+(?:-[a-z0-9]+)*)*$/i;
+// One or more segments of letters, digits, hyphens and underscores, separated by "/".
+const SLUG = /^[a-z0-9_-]+(?:\/[a-z0-9_-]+)*$/i;
 const WP_ID = /^\d+$/;
 
 function secretMatches(given: string | null, expected: string): boolean {
