@@ -19,7 +19,9 @@ const TYPES: Record<string, (slug?: string) => string[]> = {
 
 function bearerMatches(header: string | null, expected: string): boolean {
   if (header === null) return false;
-  const given = header.replace(/^Bearer\s+/i, "");
+  const match = /^Bearer\s+(.+)$/i.exec(header);
+  if (!match) return false;
+  const given = match[1];
   const a = Buffer.from(given);
   const b = Buffer.from(expected);
   return a.length === b.length && timingSafeEqual(a, b);
@@ -52,7 +54,9 @@ export async function POST(request: Request) {
     }
     // WordPress sends URIs such as "/about/team/" or "/" for the front page.
     slug = rawSlug.replace(/^\/+|\/+$/g, "");
-    if (!SLUG_CHARS.test(slug)) {
+    const emptySegment = slug !== "" && slug.split("/").some((seg) => seg === "");
+    // Post slugs are single segments; page slugs may nest but never contain empty segments.
+    if (!SLUG_CHARS.test(slug) || emptySegment || (type === "post" && slug.includes("/"))) {
       return NextResponse.json({ error: "invalid slug" }, { status: 400 });
     }
   }

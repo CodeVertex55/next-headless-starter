@@ -8,9 +8,10 @@ vi.mock("next/cache", () => ({
 }));
 import { POST } from "./route";
 
-function req(body: unknown, token: string | null = "t") {
+function req(body: unknown, token: string | null = "t", authorization?: string) {
   const headers: Record<string, string> = { "content-type": "application/json" };
-  if (token !== null) headers.authorization = `Bearer ${token}`;
+  if (authorization !== undefined) headers.authorization = authorization;
+  else if (token !== null) headers.authorization = `Bearer ${token}`;
   return new Request("http://localhost/api/revalidate", {
     method: "POST",
     headers,
@@ -46,6 +47,13 @@ describe("POST /api/revalidate", () => {
     expect((await POST(req({ type: "all" }, null))).status).toBe(401);
     expect(revalidateTag).not.toHaveBeenCalled();
   });
+  it("401 when the Authorization header has no Bearer scheme", async () => {
+    expect((await POST(req({ type: "all" }, null, "t"))).status).toBe(401);
+    expect(revalidateTag).not.toHaveBeenCalled();
+  });
+  it("accepts a lowercase bearer scheme", async () => {
+    expect((await POST(req({ type: "all" }, null, "bearer t"))).status).toBe(200);
+  });
   it("400 on malformed body", async () => {
     expect((await POST(req({ nope: 1 }))).status).toBe(400);
   });
@@ -63,6 +71,14 @@ describe("POST /api/revalidate", () => {
     expect((await POST(req({ type: "post", slug: "a:b" }))).status).toBe(400);
     expect((await POST(req({ type: "page", slug: "../x?y=1" }))).status).toBe(400);
     expect((await POST(req({ type: "post", slug: 5 }))).status).toBe(400);
+    expect(revalidateTag).not.toHaveBeenCalled();
+  });
+  it("400 on empty interior segments", async () => {
+    expect((await POST(req({ type: "page", slug: "/about//team" }))).status).toBe(400);
+    expect(revalidateTag).not.toHaveBeenCalled();
+  });
+  it("400 on a post slug containing a slash", async () => {
+    expect((await POST(req({ type: "post", slug: "a/b" }))).status).toBe(400);
     expect(revalidateTag).not.toHaveBeenCalled();
   });
   it("revalidates post tags and the sitemap", async () => {
