@@ -1,0 +1,23 @@
+{
+  "id": "post-writing-copy-before-design",
+  "slug": "writing-copy-before-design",
+  "title": "Why We Write the Copy Before We Design",
+  "excerpt": "Layouts built around lorem ipsum fall apart on contact with real words.",
+  "author": "Ingrid Valdez",
+  "publishedAt": "2026-05-20T11:00:00Z",
+  "featuredImage": {
+    "src": "/fixture/post-2.jpg",
+    "alt": "A page of handwritten headlines and crossed-out drafts",
+    "width": 1200,
+    "height": 800
+  },
+  "html": "<p>Designers love placeholder text because it is tidy. Real copy is not tidy. Headlines run long, customers write three-line reviews, and the service nobody mentioned in the brief turns out to be the one that pays the bills.</p>\n<h2>What goes wrong with placeholder text</h2>\n<p>A card layout designed around two lines of lorem ipsum looks lovely until the first real title wraps to four lines and pushes the button off the card. Multiply that by every component on every page and the build turns into a long series of apologetic fixes.</p>\n<h2>Our approach</h2>\n<p>Before we design a single screen, we outline each page in words: the headline, the key points in order, the call to action. It does not need to be polished. It needs to be real enough to reveal how long things are and which ones matter most.</p>\n<figure class=\"wp-block-image\"><img src=\"/fixture/post-2.jpg\" alt=\"A page of handwritten headlines and crossed-out drafts\" width=\"1200\" height=\"800\" loading=\"lazy\"><figcaption>Outlines on paper, long before any pixels.</figcaption></figure>\n<h2>Benefits clients notice</h2>\n<ul><li>Fewer surprises at the build stage</li><li>Sharper messaging, because choosing words forces choosing priorities</li><li>Faster approvals, since people react to real content instead of imagining it</li></ul>\n<p>It takes a little more effort at the start. It saves much more at the end, and the site reads better for it.</p>",
+  "seo": {
+    "title": "Why we write the copy before we design",
+    "description": "Layouts built around lorem ipsum fall apart on contact with real words.",
+    "canonical": null,
+    "noindex": false,
+    "ogImage": null
+  },
+  "updatedAt": "2026-05-20T11:00:00Z"
+}

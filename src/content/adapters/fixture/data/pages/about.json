@@ -1,0 +1,22 @@
+{
+  "id": "page-about",
+  "slug": ["about"],
+  "title": "About",
+  "excerpt": "Who we are and how we work.",
+  "html": "<h2>Who we are</h2>\n<p>Northfield Studio is a two-person design and build studio working out of a converted print shop. We started in 2019 after years at larger agencies, where we kept noticing that small clients got the thinnest slice of attention and the longest timelines.</p>\n<figure class=\"wp-block-image\"><img src=\"/fixture/studio.jpg\" alt=\"The studio\" width=\"1200\" height=\"800\" loading=\"lazy\"><figcaption>Our workspace, which still smells faintly of ink.</figcaption></figure>\n<p>Today we take on around a dozen projects a year. That number is deliberate. It means each client gets real design time, honest estimates and a direct line to the people doing the work.</p>\n<blockquote><p>Build less, finish more.</p></blockquote>\n<h2>How we work</h2>\n<p>We write before we draw, and we draw before we build. Content comes first because a site is only as good as what it says, and layouts designed around placeholder text tend to fall apart on contact with real words.</p>\n<ul><li>Design: research, copy structure, layouts and a lightweight design system</li><li>Build: performance-first code with accessibility checked at every stage</li><li>Maintain: updates, backups and small improvements on a predictable monthly plan</li></ul>\n<h2>What we believe</h2>\n<p>A website is a tool, not a trophy. We would rather ship a smaller site that loads in a second than a showpiece nobody can edit. If you want to meet the people behind that philosophy, visit the <a href=\"/about/team\">team page</a>.</p>",
+  "publishedAt": "2026-01-10T09:00:00Z",
+  "updatedAt": "2026-02-01T09:00:00Z",
+  "featuredImage": {
+    "src": "/fixture/studio.jpg",
+    "alt": "The studio",
+    "width": 1200,
+    "height": 800
+  },
+  "seo": {
+    "title": "About Northfield Studio",
+    "description": "Who we are and how we work.",
+    "canonical": null,
+    "noindex": false,
+    "ogImage": null
+  }
+}

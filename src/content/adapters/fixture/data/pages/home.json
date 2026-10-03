@@ -1,0 +1,22 @@
+{
+  "id": "page-home",
+  "slug": ["home"],
+  "title": "Northfield Studio",
+  "excerpt": "A small design and build studio making fast, plain-spoken websites for local businesses.",
+  "html": "<h2>Websites that are finished, not just launched</h2>\n<p>Northfield Studio designs and builds websites for independent shops, clinics, trades and community groups. We keep the team small on purpose, so the person who listens to your brief is the person who ships your site.</p>\n<p>Most of our clients come to us after a project that dragged on for months and still felt unfinished. We work in short, fixed-scope engagements with a clear end date, and we hand over everything you need to run the site yourself.</p>\n<h2>What we do</h2>\n<ul><li>Brand-led web design, from first sketch to final layout</li><li>Fast, accessible builds on a modern stack</li><li>Editing set up so your team can change content without calling us</li><li>Ongoing care plans for hosting, updates and small improvements</li></ul>\n<figure class=\"wp-block-image\"><img src=\"/fixture/studio.jpg\" alt=\"Two people reviewing a site layout at the studio\" width=\"1200\" height=\"800\" loading=\"lazy\"><figcaption>A review session in the studio, usually with tea.</figcaption></figure>\n<h2>How a project runs</h2>\n<p>Every project starts with a half-day workshop where we agree what the site has to do and what it can leave out. Two weeks later you see a clickable design. Two weeks after that you have a working site on a private address, ready for your own content and your feedback.</p>\n<blockquote><p>They said the site would take five weeks and it took five weeks. I did not know that was allowed.</p><cite>Marguerite Oyelaran, owner of Fell &amp; Furrow Bakery</cite></blockquote>\n<p>Curious whether we are a fit? Read about <a href=\"/about\">who we are</a>, browse our <a href=\"/services\">services</a>, or just <a href=\"/contact\">get in touch</a>.</p>",
+  "publishedAt": "2026-01-05T09:00:00Z",
+  "updatedAt": "2026-09-01T09:00:00Z",
+  "featuredImage": {
+    "src": "/fixture/studio.jpg",
+    "alt": "The Northfield Studio workspace",
+    "width": 1200,
+    "height": 800
+  },
+  "seo": {
+    "title": "Northfield Studio | Web design and build for small businesses",
+    "description": "A small design and build studio making fast, plain-spoken websites for independent businesses.",
+    "canonical": null,
+    "noindex": false,
+    "ogImage": null
+  }
+}

@@ -10,4 +10,9 @@ describe("getContentSource", () => {
     await expect(getContentSource()).rejects.toMatchObject({ code: "config" });
     delete process.env.CONTENT_SOURCE;
   });
+  it("returns the fixture source by default", async () => {
+    delete process.env.CONTENT_SOURCE;
+    const src = await getContentSource();
+    expect((await src.getSiteSettings()).name).toBeTruthy();
+  });
 });

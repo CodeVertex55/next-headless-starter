@@ -1,0 +1,23 @@
+{
+  "id": "post-what-a-design-system-actually-costs",
+  "slug": "what-a-design-system-actually-costs",
+  "title": "What a Design System Actually Costs",
+  "excerpt": "A small design system pays for itself faster than most clients expect. A look at the numbers.",
+  "author": "Ingrid Valdez",
+  "publishedAt": "2026-03-25T09:15:00Z",
+  "featuredImage": {
+    "src": "/fixture/post-3.jpg",
+    "alt": "A palette of colour swatches beside type samples",
+    "width": 1200,
+    "height": 800
+  },
+  "html": "<p>Design systems have a reputation for being expensive, enterprise-scale projects. At our size, a design system is a single shared file of colours, type styles and a few dozen components. It is less glamorous, and far more useful.</p>\n<h2>What we actually build</h2>\n<p>For a typical small business site we define a colour palette with named roles, a type scale, a spacing scale and around twenty components such as buttons, cards, forms and navigation. That is enough to build every page and to add new ones without redrawing anything.</p>\n<h2>Where the savings come from</h2>\n<p>The first saving is in design. New pages assemble from existing parts, so a landing page takes an afternoon instead of a week. The second is in development, because components are built once and reused. The third, and the largest, appears later, when the client adds pages without us.</p>\n<blockquote><p>The best design system is the one the client can still use after we have left.</p></blockquote>\n<figure class=\"wp-block-image\"><img src=\"/fixture/post-3.jpg\" alt=\"A palette of colour swatches beside type samples\" width=\"1200\" height=\"800\" loading=\"lazy\"><figcaption>The palette and type scale for a recent bakery project.</figcaption></figure>\n<h2>A rough cost breakdown</h2>\n<ul><li>Audit and palette: half a day</li><li>Type and spacing scales: half a day</li><li>Core components: three to four days</li><li>Documentation: one day</li></ul>\n<p>Roughly one working week, folded into the design fee. For a site that will grow for years, that is a bargain.</p>",
+  "seo": {
+    "title": "What a design system actually costs",
+    "description": "A small design system pays for itself faster than most clients expect.",
+    "canonical": null,
+    "noindex": false,
+    "ogImage": null
+  },
+  "updatedAt": "2026-03-25T09:15:00Z"
+}

@@ -26,11 +26,9 @@ export async function getContentSource(): Promise<ContentSource> {
   if (instance) return instance;
   const env = getEnv();
   if (env.source === "wordpress") {
-    // @ts-expect-error adapter added in a later task
     const { createWordPressSource } = await import("./adapters/wordpress");
     instance = createWordPressSource(env);
   } else {
-    // @ts-expect-error adapter added in a later task
     const { createFixtureSource } = await import("./adapters/fixture");
     instance = createFixtureSource();
   }

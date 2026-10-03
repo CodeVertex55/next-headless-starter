@@ -1,0 +1,17 @@
+{
+  "id": "page-contact",
+  "slug": ["contact"],
+  "title": "Contact",
+  "excerpt": "Tell us about your project. We reply within one working day.",
+  "html": "<h2>Get in touch</h2>\n<p>The best way to start is a short email telling us who you are, what you are hoping the website will do, and roughly when you would like to launch. A few honest sentences are plenty. You do not need a brief or a budget figure to write to us.</p>\n<p>We read every message ourselves, and we reply within one working day, usually sooner. If your project is not a fit, we will say so plainly and, where we can, point you to someone who is.</p>\n<h2>Ways to reach us</h2>\n<ul><li>Email: <a href=\"mailto:hello@example.com\">hello@example.com</a></li><li>Phone: 555 0142, weekdays 9am to 5pm</li><li>Studio: 14 Press Lane, Northfield (by appointment)</li></ul>\n<h2>What happens next</h2>\n<p>After your first message we book a free thirty-minute call. We listen, ask questions and tell you whether we think we can help, along with a rough range for cost and timing. If it sounds right to both of us, a written proposal follows within three working days.</p>\n<blockquote><p>We would rather turn down a project than do it badly.</p></blockquote>",
+  "publishedAt": "2026-01-25T09:00:00Z",
+  "updatedAt": "2026-06-20T09:00:00Z",
+  "featuredImage": null,
+  "seo": {
+    "title": "Contact Northfield Studio",
+    "description": "Tell us about your project. We reply within one working day.",
+    "canonical": null,
+    "noindex": false,
+    "ogImage": null
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "primary": [
+    {
+      "label": "About",
+      "href": "/about",
+      "external": false,
+      "children": [{ "label": "Team", "href": "/about/team", "external": false, "children": [] }]
+    },
+    { "label": "Services", "href": "/services", "external": false, "children": [] },
+    { "label": "Blog", "href": "/blog", "external": false, "children": [] },
+    { "label": "Contact", "href": "/contact", "external": false, "children": [] }
+  ],
+  "footer": [
+    { "label": "Privacy", "href": "/privacy", "external": false, "children": [] },
+    {
+      "label": "GitHub",
+      "href": "https://github.com/talha55/next-headless-starter",
+      "external": true,
+      "children": []
+    }
+  ]
+}

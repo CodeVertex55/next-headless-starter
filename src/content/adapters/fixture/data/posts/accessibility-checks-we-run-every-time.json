@@ -1,0 +1,18 @@
+{
+  "id": "post-accessibility-checks-we-run-every-time",
+  "slug": "accessibility-checks-we-run-every-time",
+  "title": "Accessibility Checks We Run on Every Site",
+  "excerpt": "A short, repeatable checklist that catches most of the problems real users hit.",
+  "author": "Tomas Reyes",
+  "publishedAt": "2026-07-22T08:00:00Z",
+  "featuredImage": null,
+  "html": "<p>Accessibility is not a final polish step. Retrofitting it is slow and expensive, and the people it affects are left waiting. We build the checks into the process so most problems never reach a client.</p>\n<h2>The automated pass</h2>\n<p>Automated tools catch roughly a third of issues: missing alt text, low contrast, unlabelled form fields and broken heading order. We run them on every pull request, and a failure blocks the merge.</p>\n<h2>The manual pass</h2>\n<p>The rest needs a human. Before every launch, one of us works through the full site with only a keyboard, then again with a screen reader. It takes about an hour and it reliably finds things the tools cannot.</p>\n<ul><li>Can every interactive element be reached and used with the keyboard alone?</li><li>Is the focus indicator always visible and in a logical order?</li><li>Do links and buttons make sense when read out of context?</li><li>Does the page still work at 200 percent zoom and in a narrow window?</li></ul>\n<h2>Writing for everyone</h2>\n<p>Clear, plain language is an accessibility feature too. Short sentences, descriptive headings and meaningful link text help everybody, including the person reading on a bumpy train.</p>\n<blockquote><p>If it only works for the people who built it, it does not work yet.</p></blockquote>",
+  "seo": {
+    "title": "Accessibility checks we run on every site",
+    "description": "A short, repeatable accessibility checklist for small business websites.",
+    "canonical": null,
+    "noindex": false,
+    "ogImage": null
+  },
+  "updatedAt": "2026-07-22T08:00:00Z"
+}

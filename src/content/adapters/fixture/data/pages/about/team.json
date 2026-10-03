@@ -1,0 +1,22 @@
+{
+  "id": "page-about-team",
+  "slug": ["about", "team"],
+  "title": "Team",
+  "excerpt": "The two people, and one very patient dog, behind Northfield Studio.",
+  "html": "<h2>Meet the team</h2>\n<p>There are two of us, and we split the work along the lines of what each of us does best. You will talk to both of us before a project starts and to whichever of us is leading it while it runs.</p>\n<figure class=\"wp-block-image\"><img src=\"/fixture/team.jpg\" alt=\"Ingrid and Tomas at the studio bench\" width=\"1200\" height=\"800\" loading=\"lazy\"><figcaption>Ingrid (left) and Tomas (right) in a rare moment away from their screens.</figcaption></figure>\n<h3>Ingrid Valdez, design lead</h3>\n<p>Ingrid spent eight years designing for retail and hospitality before founding the studio. She runs the discovery workshops, writes the content structure and designs every layout. She is a stickler for spacing and an advocate for plain language.</p>\n<h3>Tomas Reyes, engineering lead</h3>\n<p>Tomas has built sites for everything from two-page portfolios to regional booking systems. He owns performance, accessibility and hosting, and he is the reason our sites pass their audits on the first run.</p>\n<h2>Good to know</h2>\n<ul><li>We answer email within one working day</li><li>We are based in Northfield and work remotely with clients across the country</li><li>The dog, Biscuit, attends most meetings and contributes little</li></ul>\n<p>If you would like to work with us, start on the <a href=\"/contact\">contact page</a>.</p>",
+  "publishedAt": "2026-01-12T09:00:00Z",
+  "updatedAt": "2026-03-15T09:00:00Z",
+  "featuredImage": {
+    "src": "/fixture/team.jpg",
+    "alt": "Ingrid and Tomas at the studio bench",
+    "width": 1200,
+    "height": 800
+  },
+  "seo": {
+    "title": "Meet the Northfield Studio team",
+    "description": "The two people behind Northfield Studio, and how to work with them.",
+    "canonical": null,
+    "noindex": false,
+    "ogImage": null
+  }
+}

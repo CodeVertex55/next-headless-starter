@@ -1,0 +1,22 @@
+{
+  "id": "page-services",
+  "slug": ["services"],
+  "title": "Services",
+  "excerpt": "Design, build and care for small business websites.",
+  "html": "<h2>Our services</h2>\n<p>We offer three connected services. You can buy them together or separately, and each one has a fixed price and a defined end point so there are no open-ended retainers by surprise.</p>\n<h3>Web design</h3>\n<p>Discovery, content structure, visual design and a clickable prototype. You leave with a design you can approve and a clear picture of what will be built. Read more about <a href=\"/services/web-design\">our web design process</a>.</p>\n<h3>Web development</h3>\n<p>We build with a modern, fast stack and connect it to an editing system your team will actually enjoy using. Every build is tested for accessibility and measured against a performance budget agreed up front.</p>\n<h3>Care plans</h3>\n<p>Hosting, security updates, backups and a monthly block of time for small changes. Most clients start a care plan at launch and keep it for years.</p>\n<figure class=\"wp-block-image\"><img src=\"/fixture/web.jpg\" alt=\"A laptop showing a finished site next to a printed sketch\" width=\"1200\" height=\"800\" loading=\"lazy\"><figcaption>From sketch to shipped site.</figcaption></figure>\n<h2>What is included in every project</h2>\n<ul><li>A written project brief that we both sign off before work begins</li><li>Weekly progress notes in plain language</li><li>Full handover documentation and a recorded training session</li><li>Thirty days of free fixes after launch</li></ul>",
+  "publishedAt": "2026-01-15T09:00:00Z",
+  "updatedAt": "2026-04-02T09:00:00Z",
+  "featuredImage": {
+    "src": "/fixture/web.jpg",
+    "alt": "A laptop showing a finished site next to a printed sketch",
+    "width": 1200,
+    "height": 800
+  },
+  "seo": {
+    "title": "Services | Northfield Studio",
+    "description": "Web design, development and care plans for small businesses, all at fixed prices.",
+    "canonical": null,
+    "noindex": false,
+    "ogImage": null
+  }
+}

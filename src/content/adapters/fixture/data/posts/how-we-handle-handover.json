@@ -1,0 +1,23 @@
+{
+  "id": "post-how-we-handle-handover",
+  "slug": "how-we-handle-handover",
+  "title": "How We Handle Handover",
+  "excerpt": "A launch is not the end. A good handover means you never feel locked in.",
+  "author": "Ingrid Valdez",
+  "publishedAt": "2026-09-09T10:30:00Z",
+  "featuredImage": {
+    "src": "/fixture/post-1.jpg",
+    "alt": "A box of labelled keys and a printed manual",
+    "width": 1200,
+    "height": 800
+  },
+  "html": "<p>The easiest way to judge a studio is to ask what happens on the day after launch. Ours is designed so you could walk away from us tomorrow and keep your site running without trouble.</p>\n<h2>What lands in your inbox</h2>\n<p>On launch day we send a short handover pack. It is written in plain language, not developer shorthand, and it covers everything a new person would need to take over the site.</p>\n<ul><li>A map of the site and how its pages are organised</li><li>Logins for every service, held in a shared password manager</li><li>A one-page guide to editing and publishing content</li><li>A list of what is installed, what it costs and when it renews</li></ul>\n<figure class=\"wp-block-image\"><img src=\"/fixture/post-1.jpg\" alt=\"A box of labelled keys and a printed manual\" width=\"1200\" height=\"800\" loading=\"lazy\"><figcaption>A tidy handover is mostly labelling.</figcaption></figure>\n<h2>Training that sticks</h2>\n<p>We record a live session where we walk your team through editing, adding pages and publishing a news post. The recording lives alongside the pack, so new staff can learn from it a year from now.</p>\n<h2>After launch</h2>\n<p>For thirty days we fix anything that is not working as promised, at no charge. After that, most clients choose a care plan, but it is always a choice, never a requirement. The site belongs to you.</p>\n<blockquote><p>Good handover is how a studio shows it trusts its own work.</p></blockquote>",
+  "seo": {
+    "title": "How we handle handover",
+    "description": "A good handover means you never feel locked in. Here is what we deliver.",
+    "canonical": null,
+    "noindex": false,
+    "ogImage": null
+  },
+  "updatedAt": "2026-09-09T10:30:00Z"
+}

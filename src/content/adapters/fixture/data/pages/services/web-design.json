@@ -1,0 +1,22 @@
+{
+  "id": "page-services-web-design",
+  "slug": ["services", "web-design"],
+  "title": "Web design",
+  "excerpt": "A four-step design process that ends with a design you can approve with confidence.",
+  "html": "<h2>Web design that starts with what you need to say</h2>\n<p>Our web design service takes about four weeks and costs a fixed fee. It is built around one idea: decisions are cheaper to make on paper than in code, so we make as many as possible before development begins.</p>\n<h3>The four steps</h3>\n<ol><li><strong>Workshop.</strong> A half-day session to agree goals, audiences and the pages the site really needs.</li><li><strong>Content structure.</strong> We outline each page in words, so layouts are designed around real content.</li><li><strong>Visual design.</strong> Layouts for desktop and mobile, with a small design system of colours, type and components.</li><li><strong>Prototype.</strong> A clickable version you can test with your own customers before anything is built.</li></ol>\n<figure class=\"wp-block-image\"><img src=\"/fixture/web.jpg\" alt=\"A clickable prototype on a laptop screen\" width=\"1200\" height=\"800\" loading=\"lazy\"><figcaption>The prototype is the last thing you approve before build begins.</figcaption></figure>\n<h3>What you receive</h3>\n<p>You receive the final layouts, the design system documented in a single shared file, and a content outline for every page. If you decide to build elsewhere, everything transfers cleanly. If you decide to build with us, the design flows straight into development with nothing lost in translation.</p>\n<blockquote><p>The prototype let our staff try the booking flow before it existed. We changed three things and avoided a very awkward launch.</p><cite>Dr Aiyana Brooks, Lakeside Physiotherapy</cite></blockquote>\n<p>Ready to talk through your project? <a href=\"/contact\">Send us a note</a> and we will reply within a working day.</p>",
+  "publishedAt": "2026-01-20T09:00:00Z",
+  "updatedAt": "2026-05-12T09:00:00Z",
+  "featuredImage": {
+    "src": "/fixture/web.jpg",
+    "alt": "A clickable prototype on a laptop screen",
+    "width": 1200,
+    "height": 800
+  },
+  "seo": {
+    "title": "Web design | Northfield Studio",
+    "description": "A four-step design process: workshop, content structure, visual design and a clickable prototype.",
+    "canonical": null,
+    "noindex": false,
+    "ogImage": null
+  }
+}
