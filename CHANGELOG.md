@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.0 (unreleased)
+## 1.0.0 (2026-10-03)
 
 First release. Requires Node.js 22 or later.
 

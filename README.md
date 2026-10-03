@@ -2,7 +2,7 @@
 
 A Next.js 16 starter for headless WordPress, with a swappable content layer and a built-in sample site.
 
-Demo: [next-headless-starter.vercel.app](https://next-headless-starter.vercel.app) <!-- update after deploy -->
+Demo: [next-headless-starter.vercel.app](https://next-headless-starter.vercel.app)
 
 ## What you get
 
