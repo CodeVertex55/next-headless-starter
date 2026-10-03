@@ -7,7 +7,7 @@ First release.
 - Next.js 16 App Router site with a swappable content layer behind a `ContentSource` interface.
 - Fixture adapter with a sample site, Northfield Studio (six pages, eight posts). It needs no configuration and is the default.
 - WordPress adapter for WPGraphQL: pages (including nested pages), posts, menus and site settings.
-- Yoast SEO and Rank Math field detection with an ordinary query, so it works with introspection off.
+- Yoast SEO support through WPGraphQL for Yoast SEO, detected with an ordinary query (a Yoast-only field) so it works with introspection off. Rank Math is not supported yet; it is planned for 1.1.
 - Tag-based caching (3600 seconds) and a `POST /api/revalidate` webhook that invalidates by tag.
 - Draft preview through `/api/preview` and `/api/preview/exit`, authenticated with a WordPress application password.
 - Blog index with numbered pagination over WPGraphQL cursors.

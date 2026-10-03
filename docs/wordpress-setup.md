@@ -6,7 +6,7 @@ This guide covers everything WordPress needs to feed this starter. For a local i
 
 - WordPress with pretty permalinks (Settings > Permalinks > Post name).
 - The [WPGraphQL](https://wordpress.org/plugins/wp-graphql/) plugin. It is required.
-- Optional: [WPGraphQL for Yoast SEO](https://github.com/ashhitch/wp-graphql-yoast-seo) or a WPGraphQL integration for Rank Math. Without one of them, pages render without SEO fields.
+- Optional: [Yoast SEO](https://wordpress.org/plugins/wordpress-seo/) with [WPGraphQL for Yoast SEO](https://github.com/ashhitch/wp-graphql-yoast-seo). Without them, pages render without SEO fields. Yoast is the only SEO plugin supported in 1.0. Rank Math support is planned for 1.1.
 - Optional: the WPGraphQL Offset Pagination extension. It makes the blog index total cheaper on large sites.
 
 ## PHP snippets
@@ -62,9 +62,11 @@ Generate a secret with `openssl rand -hex 32`.
 
 ## SEO fields
 
-The adapter checks whether Yoast or Rank Math fields exist with an ordinary GraphQL query. It does not use introspection, because WPGraphQL disables introspection by default.
+The adapter checks whether the Yoast fields exist with an ordinary GraphQL query that selects a Yoast-only field. It does not use introspection, because WPGraphQL disables introspection by default.
 
-If the check is inconclusive, for example the endpoint is down at that moment, pages render without SEO fields until the next revalidation, which is up to one hour. The adapter logs one warning when this happens.
+If WordPress rejects the query, the adapter treats Yoast as absent and renders pages without SEO fields. Another SEO plugin that exposes its own `seo` field, such as a Rank Math integration, is treated the same way, so it never breaks a page.
+
+If the check cannot reach WordPress, for example the endpoint is down at that moment, pages render without SEO fields until the next revalidation, which is up to one hour. The adapter logs one warning when this happens and checks again on the next request.
 
 Canonical URLs that Yoast writes against the WordPress origin are dropped, so they never point search engines at your CMS.
 

@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { DynamicServerError } from "next/dist/client/components/hooks-server-context";
 import { ContentError } from "@/content/errors";
 import { SITE_URL } from "@/lib/site";
 import pageWithSeo from "./__fixtures__/page-with-seo.json";
@@ -348,20 +349,76 @@ describe("errors and the SEO probe", () => {
   const probes = (calls: Call[]) => calls.filter((c) => c.query.includes("SeoProbe"));
   const pageCall = (calls: Call[]) => calls.find((c) => c.query.includes("PageByUri"))!;
 
-  it("probe success: SEO is present, remembered, and the probe is not cached or tagged", async () => {
+  it("probe success: SEO is present, remembered, and the probe is cached and tagged site", async () => {
     const calls = stubWordPress((c) => withSeo(c) || pageWithSeo);
     const src = createWordPressSource(env);
     await src.getPage(["about"]);
     await src.getPage(["services"]);
     expect(probes(calls)).toHaveLength(1);
-    expect(probes(calls)[0].init.cache).toBe("no-store");
-    expect(nextOf(probes(calls)[0])).toBeUndefined();
+    // A no-store fetch during prerender would make the route dynamic, so the probe is cached.
+    expect(probes(calls)[0].init.cache).toBeUndefined();
+    expect(nextOf(probes(calls)[0])).toEqual({ revalidate: 3600, tags: ["site"] });
     expect(pageCall(calls).query).toContain("metaDesc");
     expect(console.warn).not.toHaveBeenCalled();
   });
 
+  it("probe selects a Yoast-only field", async () => {
+    const calls = stubWordPress((c) => withSeo(c) || pageWithSeo);
+    await createWordPressSource(env).getPage(["about"]);
+    const probe = probes(calls)[0].query;
+    expect(probe).toMatch(/seo\s*{\s*metaDesc\s*}/);
+    expect(probe).not.toMatch(/title/);
+  });
+
   it("probe naming the seo field: SEO is absent, remembered, without a warning", async () => {
     const calls = stubWordPress((c) => noSeo(c) || pageWithSeo);
+    const src = createWordPressSource(env);
+    await src.getPage(["about"]);
+    await src.getPage(["services"]);
+    expect(probes(calls)).toHaveLength(1);
+    expect(pageCall(calls).query).not.toContain("metaDesc");
+    expect(console.warn).not.toHaveBeenCalled();
+  });
+
+  it("probe rejected for metaDesc (another SEO plugin's seo type): SEO is absent and remembered", async () => {
+    const calls = stubWordPress((c) =>
+      c.query.includes("SeoProbe")
+        ? {
+            errors: [{ message: 'Cannot query field "metaDesc" on type "RankMathPostTypeSeo".' }],
+          }
+        : pageWithSeo,
+    );
+    const src = createWordPressSource(env);
+    await src.getPage(["about"]);
+    await src.getPage(["services"]);
+    expect(probes(calls)).toHaveLength(1);
+    expect(pageCall(calls).query).not.toContain("metaDesc");
+    expect(console.warn).not.toHaveBeenCalled();
+  });
+
+  it("probe answered with HTTP 500 and a GraphQL validation body: SEO is absent and remembered", async () => {
+    const calls = stubWordPress((c) =>
+      c.query.includes("SeoProbe")
+        ? Response.json(
+            { errors: [{ message: 'Cannot query field "metaDesc" on type "PostSeo".' }] },
+            { status: 500 },
+          )
+        : pageWithSeo,
+    );
+    const src = createWordPressSource(env);
+    await src.getPage(["about"]);
+    await src.getPage(["services"]);
+    expect(probes(calls)).toHaveLength(1);
+    expect(pageCall(calls).query).not.toContain("metaDesc");
+    expect(console.warn).not.toHaveBeenCalled();
+  });
+
+  it("probe with any other GraphQL error: SEO is absent and remembered, without a warning", async () => {
+    const calls = stubWordPress((c) =>
+      c.query.includes("SeoProbe")
+        ? { errors: [{ message: "Internal server error" }] }
+        : pageWithSeo,
+    );
     const src = createWordPressSource(env);
     await src.getPage(["about"]);
     await src.getPage(["services"]);
@@ -387,18 +444,36 @@ describe("errors and the SEO probe", () => {
     expect(console.warn).toHaveBeenCalledTimes(1);
   });
 
-  it("probe with an unrelated GraphQL error: no SEO for that call, not remembered, warned", async () => {
-    const calls = stubWordPress((c) =>
-      c.query.includes("SeoProbe")
-        ? { errors: [{ message: "Internal server error" }] }
-        : pageWithSeo,
-    );
+  it("rethrows Next.js internal errors from the probe and does not remember them", async () => {
+    const dynamic = new DynamicServerError("no-store fetch");
+    let attempt = 0;
+    stubWordPress((c) => {
+      if (c.query.includes("SeoProbe") && attempt++ === 0) throw dynamic;
+      return withSeo(c) || pageWithSeo;
+    });
     const src = createWordPressSource(env);
-    await src.getPage(["about"]);
-    await src.getPage(["services"]);
-    expect(probes(calls)).toHaveLength(2);
-    expect(pageCall(calls).query).not.toContain("metaDesc");
-    expect(console.warn).toHaveBeenCalledTimes(1);
+    await expect(src.getPage(["about"])).rejects.toBe(dynamic);
+    expect((await src.getPage(["about"]))?.seo.description).toBeTruthy();
+    expect(console.warn).not.toHaveBeenCalled();
+  });
+
+  it("rethrows Next.js internal errors from the offset pagination fallback", async () => {
+    const dynamic = new DynamicServerError("no-store fetch");
+    stubWordPress((c) => {
+      if (c.query.includes("SeoProbe")) return noSeo(c);
+      if (c.query.includes("offsetPagination")) throw dynamic;
+      return {
+        data: {
+          posts: {
+            pageInfo: { hasNextPage: true, endCursor: "cur" },
+            nodes: postsPage1.data.posts.nodes,
+          },
+        },
+      };
+    });
+    await expect(createWordPressSource(env).getPosts({ page: 1, perPage: 1 })).rejects.toBe(
+      dynamic,
+    );
   });
 
   it("maps HTTP errors, GraphQL errors and fetch failures to ContentError codes", async () => {

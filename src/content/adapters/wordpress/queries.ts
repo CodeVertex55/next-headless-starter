@@ -27,14 +27,15 @@ const SEO = gql`
 `;
 
 // An ordinary query rather than introspection: WPGraphQL disables public introspection by default,
-// so `__type` would fail on a stock install. This validates only when the Yoast addon is present;
-// otherwise WordPress rejects it with an error that names the `seo` field.
+// so `__type` would fail on a stock install. It selects `metaDesc`, which only the WPGraphQL Yoast
+// addon provides, so it validates only when that addon is present. Any other schema (no SEO plugin,
+// or another plugin with its own `seo` field) rejects it with a GraphQL error.
 export const SEO_PROBE = gql`
   query SeoProbe {
     posts(first: 1) {
       nodes {
         seo {
-          title
+          metaDesc
         }
       }
     }

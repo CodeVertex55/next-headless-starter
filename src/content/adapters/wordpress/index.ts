@@ -1,3 +1,4 @@
+import { unstable_rethrow } from "next/navigation";
 import { ContentError } from "@/content/errors";
 import type { ContentSource } from "@/content/source";
 import type { MenuLocation, PostSummary } from "@/content/types";
@@ -73,20 +74,25 @@ export function createWordPressSource(env: Env): ContentSource {
   const mapOpts: MapOptions = cmsOrigin && cmsOrigin !== originOf(SITE_URL) ? { cmsOrigin } : {};
 
   // Does the schema have the Yoast addon? An ordinary query answers it (introspection is off by
-  // default in WPGraphQL). Only a definite answer is remembered for the process: success means
-  // present, a GraphQL error naming the `seo` field means absent. Anything else (network failure,
-  // unrelated GraphQL error) is not remembered, so the next call asks again; that call runs without
-  // SEO, and the first such failure is logged once.
+  // default in WPGraphQL). It selects `metaDesc`, a field only the Yoast addon has; other SEO
+  // plugins can expose a `seo` field too, and selecting the full Yoast shape against them would
+  // fail every content query. Only a definite answer is remembered for the process: success means
+  // present, any GraphQL error (the schema rejected the Yoast fields) means absent. A network
+  // failure is not remembered, so the next call asks again; that call runs without SEO, and the
+  // first such failure is logged once. The probe is cached like any content request, so it does
+  // not make a prerendered route dynamic.
   let seoProbe: Promise<boolean> | null = null;
   let warnedProbe = false;
   function hasSeo(): Promise<boolean> {
-    seoProbe ??= request<unknown>(SEO_PROBE, {}, { tags: [], noStore: true })
+    seoProbe ??= request<unknown>(SEO_PROBE, {}, { tags: [tag.site] })
       .then(() => true)
       .catch((e: unknown) => {
-        if (e instanceof ContentError && e.code === "graphql" && /\bseo\b/i.test(e.message)) {
-          return false;
-        }
-        seoProbe = null;
+        const absent = e instanceof ContentError && e.code === "graphql";
+        // Not a definite answer, so ask again next time. Cleared before the rethrow below, so a
+        // Next.js internal error is not remembered either.
+        if (!absent) seoProbe = null;
+        unstable_rethrow(e);
+        if (absent) return false;
         if (!warnedProbe) {
           warnedProbe = true;
           const message = e instanceof Error ? e.message : String(e);
@@ -136,6 +142,7 @@ export function createWordPressSource(env: Env): ContentSource {
         }
         offsetSupported = false;
       } catch (e) {
+        unstable_rethrow(e);
         const unsupported =
           e instanceof ContentError && e.code === "graphql" && /offsetPagination/.test(e.message);
         if (!unsupported) throw e;

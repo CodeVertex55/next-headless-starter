@@ -10,7 +10,7 @@ Demo: [next-headless-starter.vercel.app](https://next-headless-starter.vercel.ap
 - A `ContentSource` interface, so WordPress is one adapter and not a hard dependency.
 - A fixture adapter with a sample site, Northfield Studio, that runs with no configuration.
 - A WPGraphQL adapter for pages, nested pages, posts, menus and site settings.
-- Yoast SEO and Rank Math fields, with canonical URLs, Open Graph, JSON-LD, a sitemap and `robots.txt`.
+- Yoast SEO fields, with canonical URLs, Open Graph, JSON-LD, a sitemap and `robots.txt`.
 - Draft preview for editors, using a WordPress application password.
 - Tag-based caching and a revalidation webhook, so edits go live without a rebuild.
 - A WordPress-aware HTML sanitiser for content from the editor.
@@ -33,10 +33,10 @@ Open `http://localhost:3000`. You see Northfield Studio, a sample site with six 
 ### Plugins
 
 - [WPGraphQL](https://wordpress.org/plugins/wp-graphql/) is required.
-- [WPGraphQL for Yoast SEO](https://github.com/ashhitch/wp-graphql-yoast-seo) or a WPGraphQL integration for Rank Math is optional. It adds SEO fields.
+- [WPGraphQL for Yoast SEO](https://github.com/ashhitch/wp-graphql-yoast-seo), with Yoast SEO, is optional. It adds SEO fields. Yoast is the only SEO plugin supported in 1.0. Rank Math support is planned for 1.1.
 - The WPGraphQL Offset Pagination extension is optional. It makes the blog total cheaper.
 
-The adapter detects the SEO fields with an ordinary query, not introspection, which WPGraphQL disables by default. If the check is inconclusive, pages render without SEO fields until the next revalidation, up to one hour, and one warning is logged.
+The adapter detects the Yoast fields with an ordinary query, not introspection, which WPGraphQL disables by default. When WordPress rejects the query, the site runs without SEO fields. If WordPress cannot be reached for the check, pages render without SEO fields until the next revalidation, up to one hour, and one warning is logged.
 
 ### Menu locations
 
@@ -231,7 +231,7 @@ runContractTests("my-source", async () => createMySource());
 
 ## Roadmap
 
-- 1.1: a Gutenberg block component map.
+- 1.1: a Gutenberg block component map, and Rank Math SEO support.
 - Later: search, forms, i18n, and Shopify and Webflow adapters.
 
 ## Licence
