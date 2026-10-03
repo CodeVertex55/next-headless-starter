@@ -1,7 +1,4 @@
-// Placeholder - implemented in a later task
-import type { ContentSource } from "../source";
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function createWordPressSource(_env: unknown): ContentSource {
+// Placeholder - will be replaced by adapters/wordpress/index.ts in Task 9
+export function createWordPressSource(): never {
   throw new Error("Not implemented");
 }
