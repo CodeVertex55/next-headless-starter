@@ -8,18 +8,27 @@ function read(name: string): string | undefined {
   return v && v.trim() !== "" ? v.trim() : undefined;
 }
 
+const LOCALHOST_URL = "http://localhost:3000";
+let warnedLocalhost = false;
+
 /**
- * The public URL of this site: SITE_URL, else the Vercel production domain, else localhost outside
- * production. Production without either is a configuration error, because canonical URLs, the
- * sitemap and schema would otherwise point at localhost.
+ * The public URL of this site: SITE_URL, else the Vercel production domain, else localhost. A
+ * missing value never throws, so `npm run build` works out of the box, but a production process
+ * that falls back to localhost warns once, because canonical URLs, the sitemap and robots would
+ * point at localhost. A malformed value is a configuration error.
  */
 function resolveSiteUrl(): string {
   const vercel = read("VERCEL_PROJECT_PRODUCTION_URL");
-  const value =
-    read("SITE_URL") ??
-    (vercel ? `https://${vercel}` : undefined) ??
-    (process.env.NODE_ENV !== "production" ? "http://localhost:3000" : undefined);
-  if (!value) throw new ContentError("config", "SITE_URL is required in production");
+  const value = read("SITE_URL") ?? (vercel ? `https://${vercel}` : undefined);
+  if (!value) {
+    if (process.env.NODE_ENV === "production" && !warnedLocalhost) {
+      warnedLocalhost = true;
+      console.warn(
+        `SITE_URL is not set; canonical URLs, sitemap and robots will point at ${LOCALHOST_URL}. Set SITE_URL for production deployments.`,
+      );
+    }
+    return LOCALHOST_URL;
+  }
   let url: URL;
   try {
     url = new URL(value);
@@ -30,6 +39,11 @@ function resolveSiteUrl(): string {
     throw new ContentError("config", `SITE_URL must use http or https, got "${value}"`);
   }
   return value;
+}
+
+/** Test-only: let the next production fallback warn again. */
+export function __resetSiteUrlWarning() {
+  warnedLocalhost = false;
 }
 
 export function getEnv() {

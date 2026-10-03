@@ -55,7 +55,7 @@ Go to Settings > Reading, choose "A static page" under "Your homepage displays",
 | Variable | Value |
 | --- | --- |
 | `CONTENT_SOURCE` | `wordpress` |
-| `SITE_URL` | The public URL of the Next.js site, for example `https://example.com`. Required in production; on Vercel it falls back to the production domain |
+| `SITE_URL` | The public URL of the Next.js site, for example `https://example.com`. Required for production deployments; on Vercel it falls back to the production domain. Otherwise it defaults to `http://localhost:3000`, with a warning in production |
 | `WP_GRAPHQL_URL` | Your WPGraphQL endpoint, usually `https://cms.example.com/graphql` |
 | `WP_APP_USER` | The WordPress user the application password belongs to |
 | `WP_APP_PASSWORD` | The application password, used for draft preview only |

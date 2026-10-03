@@ -14,7 +14,7 @@ First release. Requires Node.js 22 or later.
 - Slugs with underscores are accepted by the preview and revalidation routes.
 - Blog index with numbered pagination over WPGraphQL cursors.
 - Metadata, canonical URLs, Open Graph, JSON-LD with absolute image URLs, `sitemap.xml` and `robots.txt`.
-- `SITE_URL` is required in production. On Vercel it falls back to the production domain.
+- `SITE_URL` is required for production deployments. On Vercel it falls back to the production domain. Otherwise it defaults to `http://localhost:3000`, and a production build or server logs a warning.
 - Featured images from a WordPress on `localhost` work in development.
 - WordPress-aware HTML sanitiser for post and page content.
 - Shared contract test suite, `runContractTests`, that any adapter can run.
