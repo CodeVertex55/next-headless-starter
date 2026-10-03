@@ -74,4 +74,9 @@ describe("GET /api/preview", () => {
     expect(res.status).toBe(307);
     expect(res.headers.get("location")).toBe("http://localhost/about/team");
   });
+  it("redirects the front page slug home to the site root", async () => {
+    const res = await GET(req("secret=s&type=page&id=1&slug=home"));
+    expect(res.status).toBe(307);
+    expect(res.headers.get("location")).toBe("http://localhost/");
+  });
 });

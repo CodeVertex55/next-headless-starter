@@ -28,7 +28,8 @@ export async function GET(request: Request) {
   }
   if (!SLUG.test(slug)) return NextResponse.json({ error: "invalid slug" }, { status: 400 });
   if (!WP_ID.test(id)) return NextResponse.json({ error: "invalid id" }, { status: 400 });
-  const target = type === "post" ? `/blog/${slug}` : `/${slug}`;
+  // The front page is served at "/" only, so a page with the slug "home" previews there.
+  const target = type === "post" ? `/blog/${slug}` : slug === "home" ? "/" : `/${slug}`;
   const destination = new URL(target, url.origin);
   if (destination.origin !== url.origin) {
     return NextResponse.json({ error: "invalid slug" }, { status: 400 });

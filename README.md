@@ -85,7 +85,7 @@ The preview URL looks like this:
 /api/preview?secret=<PREVIEW_SECRET>&type=post|page&id=<WordPress database id>&slug=<slug or nested/page/path>
 ```
 
-The slug may contain letters, digits, hyphens and `/`. Underscores and non-ASCII slugs are rejected. Exit preview at `/api/preview/exit`.
+The slug may contain letters, digits, hyphens and `/`. Underscores and non-ASCII slugs are rejected. The front page previews at `/` when its slug is `home`. Exit preview at `/api/preview/exit`.
 
 Behind a TLS-terminating proxy that forwards plain http, the preview cookie is not marked Secure. Set the proxy to forward the original protocol.
 
