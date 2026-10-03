@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // A local WordPress install (see docs/local-wordpress.md) may live here. It is not our code.
+    ".wp-local/**",
   ]),
 ]);
 
