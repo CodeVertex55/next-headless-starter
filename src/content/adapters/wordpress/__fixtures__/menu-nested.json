@@ -1,54 +1,34 @@
 {
   "data": {
-    "generalSettings": { "url": "http://localhost" },
+    "generalSettings": {
+      "url": "http://localhost:8881"
+    },
     "menus": {
       "nodes": [
         {
           "menuItems": {
             "nodes": [
               {
-                "id": "m1",
+                "id": "cG9zdDoxMw==",
                 "parentId": null,
                 "label": "About",
-                "url": "http://localhost/about/",
+                "url": "http://localhost:8881/about/",
                 "target": null
               },
               {
-                "id": "m2",
-                "parentId": "m1",
+                "id": "cG9zdDoxNA==",
+                "parentId": "cG9zdDoxMw==",
                 "label": "Team",
-                "url": "http://localhost/about/team/",
+                "url": "http://localhost:8881/about/team/",
                 "target": null
               },
               {
-                "id": "m3",
+                "id": "cG9zdDoxNQ==",
                 "parentId": null,
                 "label": "Blog",
-                "url": "http://localhost/blog/",
+                "url": "http://localhost:8881/blog/",
                 "target": null
-              },
-              {
-                "id": "m4",
-                "parentId": null,
-                "label": "GitHub",
-                "url": "https://github.com/talha55/next-headless-starter",
-                "target": "_blank"
-              },
-              {
-                "id": "m5",
-                "parentId": null,
-                "label": "Q&amp;A",
-                "url": "http://localhost.evil.example/qa",
-                "target": null
-              },
-              {
-                "id": "m6",
-                "parentId": null,
-                "label": "Home",
-                "url": "http://localhost",
-                "target": null
-              },
-              { "id": "m7", "parentId": null, "label": "Jump", "url": "#contact", "target": null }
+              }
             ]
           }
         }

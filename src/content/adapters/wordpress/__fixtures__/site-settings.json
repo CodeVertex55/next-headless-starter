@@ -1,9 +1,9 @@
 {
   "data": {
     "generalSettings": {
-      "title": "Northfield Studio",
-      "description": "Fast, plain-spoken websites &amp; care plans",
-      "url": "http://localhost"
+      "title": "Northfield WP",
+      "description": "A local WordPress for the headless starter.",
+      "url": "http://localhost:8881"
     }
   }
 }

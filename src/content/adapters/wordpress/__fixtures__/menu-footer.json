@@ -1,0 +1,31 @@
+{
+  "data": {
+    "generalSettings": {
+      "url": "http://localhost:8881"
+    },
+    "menus": {
+      "nodes": [
+        {
+          "menuItems": {
+            "nodes": [
+              {
+                "id": "cG9zdDoxNg==",
+                "parentId": null,
+                "label": "Privacy",
+                "url": "http://localhost:8881/privacy/",
+                "target": null
+              },
+              {
+                "id": "cG9zdDoxNw==",
+                "parentId": null,
+                "label": "WordPress",
+                "url": "https://wordpress.org/",
+                "target": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

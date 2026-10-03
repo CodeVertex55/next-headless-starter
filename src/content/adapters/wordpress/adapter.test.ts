@@ -3,8 +3,10 @@ import { DynamicServerError } from "next/dist/client/components/hooks-server-con
 import { ContentError } from "@/content/errors";
 import { SITE_URL } from "@/lib/site";
 import pageWithSeo from "./__fixtures__/page-with-seo.json";
+import pageWithoutSeo from "./__fixtures__/page-without-seo.json";
 import pageNoindexHome from "./__fixtures__/page-noindex-home.json";
 import postWithImage from "./__fixtures__/post-with-image.json";
+import postWithoutImage from "./__fixtures__/post-without-image.json";
 import menuNested from "./__fixtures__/menu-nested.json";
 import postsPage1 from "./__fixtures__/posts-page-1.json";
 import siteSettings from "./__fixtures__/site-settings.json";
@@ -62,6 +64,7 @@ describe("site settings and menus", () => {
   it("tags settings with site and uses SITE_URL, not the WordPress url", async () => {
     const calls = stubWordPress(() => siteSettings);
     const s = await createWordPressSource(env).getSiteSettings();
+    expect(s.name).toBe("Northfield WP");
     expect(s.url).toBe(SITE_URL);
     expect(s.url.endsWith("/")).toBe(false);
     expect(nextOf(calls[0])?.tags).toEqual(["site"]);
@@ -73,6 +76,7 @@ describe("site settings and menus", () => {
     expect(calls[0].variables).toEqual({ location: "PRIMARY" });
     expect(nextOf(calls[0])?.tags).toEqual(["menus"]);
     expect(menu.items[0]).toMatchObject({ label: "About", href: "/about", external: false });
+    expect(menu.items[0].children).toMatchObject([{ label: "Team", href: "/about/team" }]);
   });
 
   it("returns an empty menu when WordPress has none for the location", async () => {
@@ -99,9 +103,18 @@ describe("pages", () => {
   });
 
   it("drops the seo selection when the schema has no Yoast type", async () => {
-    const calls = stubWordPress((c) => noSeo(c) || pageWithSeo);
-    await createWordPressSource(env).getPage(["about"]);
+    const calls = stubWordPress((c) => noSeo(c) || pageWithoutSeo);
+    const page = await createWordPressSource(env).getPage(["about", "team"]);
     expect(calls.find((c) => c.query.includes("PageByUri"))?.query).not.toContain("metaDesc");
+    expect(page).toMatchObject({
+      title: "Team",
+      path: "/about/team",
+      seo: {
+        title: "Team",
+        absoluteTitle: false,
+        description: expect.stringContaining("Two people"),
+      },
+    });
   });
 
   it("returns null for a missing page", async () => {
@@ -171,12 +184,22 @@ describe("pages", () => {
 
 describe("posts", () => {
   it("tags a post with posts and post:<slug>", async () => {
-    const calls = stubWordPress((c) => withSeo(c) || postWithImage);
-    const post = await createWordPressSource(env).getPost("launching-a-site-in-a-week");
-    expect(post?.author).toBe("Ada Okafor");
+    const calls = stubWordPress((c) => noSeo(c) || postWithImage);
+    const post = await createWordPressSource(env).getPost("hello-from-wordpress");
+    expect(post?.author).toBe("admin");
+    expect(post?.featuredImage?.src).toBe(
+      "http://localhost:8881/wp-content/uploads/2026/10/post-1.jpg",
+    );
     const call = calls.find((c) => c.query.includes("PostBySlug"));
-    expect(call?.variables).toEqual({ slug: "launching-a-site-in-a-week" });
-    expect(nextOf(call!)?.tags).toEqual(["posts", "post:launching-a-site-in-a-week"]);
+    expect(call?.variables).toEqual({ slug: "hello-from-wordpress" });
+    expect(nextOf(call!)?.tags).toEqual(["posts", "post:hello-from-wordpress"]);
+  });
+
+  it("maps a post without a featured image", async () => {
+    stubWordPress((c) => noSeo(c) || postWithoutImage);
+    const post = await createWordPressSource(env).getPost("third-and-newest");
+    expect(post).toMatchObject({ slug: "third-and-newest", featuredImage: null });
+    expect(post?.seo.ogImage).toBeNull();
   });
 
   it("returns null for a missing post", async () => {
@@ -339,8 +362,8 @@ describe("preview", () => {
   });
 
   it("previews posts the same way", async () => {
-    const calls = stubWordPress((c) => withSeo(c) || postWithImage);
-    await createWordPressSource(env).getPost("x", { preview: { secretVerified: true, id: "101" } });
+    const calls = stubWordPress((c) => noSeo(c) || postWithImage);
+    await createWordPressSource(env).getPost("x", { preview: { secretVerified: true, id: "8" } });
     const call = calls.find((c) => c.query.includes("PostPreview"))!;
     expect(call.init.cache).toBe("no-store");
     expect(call.init.headers).toHaveProperty("authorization");

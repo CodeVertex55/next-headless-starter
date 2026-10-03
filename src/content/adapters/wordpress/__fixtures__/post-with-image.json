@@ -1,29 +1,29 @@
 {
   "data": {
     "post": {
-      "id": "cG9zdDoxMDE=",
-      "slug": "launching-a-site-in-a-week",
-      "title": "Launching a site in a week",
-      "content": "<p>Here is how we did it.</p>\n<iframe src=\"https://www.youtube.com/embed/abc\" width=\"560\" height=\"315\"></iframe>\n<iframe src=\"https://evil.example/embed\"></iframe>",
-      "excerpt": "<p>Here is how we did it, with every decision &hellip; and every shortcut we refused.</p>\n",
-      "date": "2026-08-20T14:00:00",
-      "dateGmt": "2026-08-20T13:00:00",
-      "modified": "2026-08-21T08:00:00",
-      "modifiedGmt": "2026-08-21T07:00:00",
-      "author": { "node": { "name": "Ada Okafor" } },
-      "featuredImage": {
+      "id": "cG9zdDo4",
+      "slug": "hello-from-wordpress",
+      "title": "Hello from WordPress",
+      "content": "<p class=\"wp-block-paragraph\">First post, with a featured image and a <a href=\"https://example.com\">link</a>.</p>",
+      "excerpt": "<p>First post with a featured image.</p>\n",
+      "date": "2026-03-01T09:00:00",
+      "dateGmt": "2026-03-01T09:00:00",
+      "modified": "2026-03-01T09:00:00",
+      "modifiedGmt": "2026-03-01T09:00:00",
+      "author": {
         "node": {
-          "sourceUrl": "http://localhost/wp-content/uploads/launch.jpg",
-          "altText": "A laptop and a calendar",
-          "mediaDetails": { "width": 1280, "height": 720 }
+          "name": "admin"
         }
       },
-      "seo": {
-        "title": "Launching a site in a week | Northfield Studio",
-        "metaDesc": "A week-long launch, step by step.",
-        "canonical": "http://localhost/launching-a-site-in-a-week/",
-        "metaRobotsNoindex": "index",
-        "opengraphImage": null
+      "featuredImage": {
+        "node": {
+          "sourceUrl": "http://localhost:8881/wp-content/uploads/2026/10/post-1.jpg",
+          "altText": "A flat colour placeholder",
+          "mediaDetails": {
+            "width": 1200,
+            "height": 800
+          }
+        }
       }
     }
   }

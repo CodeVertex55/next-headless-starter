@@ -1,16 +1,20 @@
 {
   "data": {
     "post": {
-      "id": "cG9zdDoxMDI=",
-      "slug": "choosing-a-headless-cms",
-      "title": "Choosing a headless CMS",
-      "content": "<p>Pick the one your editors can use.</p>",
-      "excerpt": "<p>Pick the one your editors can use.</p>",
-      "date": "2026-07-01T09:00:00",
-      "dateGmt": "2026-07-01T08:00:00",
-      "modified": "2026-07-01T09:00:00",
-      "modifiedGmt": "2026-07-01T08:00:00",
-      "author": null,
+      "id": "cG9zdDoxMA==",
+      "slug": "third-and-newest",
+      "title": "Third and newest EDITED",
+      "content": "<p class=\"wp-block-paragraph\">The newest published post.</p><pre class=\"wp-block-code\"><code>npm run dev</code></pre>",
+      "excerpt": "<p>Newest post.</p>\n",
+      "date": "2026-08-20T09:00:00",
+      "dateGmt": "2026-08-20T09:00:00",
+      "modified": "2026-10-03T14:13:01",
+      "modifiedGmt": "2026-10-03T14:13:01",
+      "author": {
+        "node": {
+          "name": "admin"
+        }
+      },
       "featuredImage": null
     }
   }
