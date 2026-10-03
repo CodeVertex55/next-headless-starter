@@ -55,3 +55,43 @@ describe("createClient request dedupe", () => {
     expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 });
+
+describe("createClient non-2xx handling", () => {
+  it("maps HTTP 500 with a GraphQL errors body to a graphql error", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () =>
+        Response.json(
+          { errors: [{ message: "bad field" }, { message: "worse" }] },
+          { status: 500 },
+        ),
+      ),
+    );
+    const request = createClient({ url: "http://wp/graphql" });
+    await expect(request("{ a }", {}, { tags: [] })).rejects.toMatchObject({
+      code: "graphql",
+      message: "bad field; worse",
+    });
+  });
+
+  it("maps HTTP 502 with an HTML body to a network error", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => new Response("<html>Bad gateway</html>", { status: 502 })),
+    );
+    const request = createClient({ url: "http://wp/graphql" });
+    await expect(request("{ a }", {}, { tags: [] })).rejects.toMatchObject({
+      code: "network",
+      message: "WPGraphQL responded 502",
+    });
+  });
+
+  it("maps a non-2xx JSON body without errors to a network error", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => Response.json({ message: "nope" }, { status: 500 })),
+    );
+    const request = createClient({ url: "http://wp/graphql" });
+    await expect(request("{ a }", {}, { tags: [] })).rejects.toMatchObject({ code: "network" });
+  });
+});

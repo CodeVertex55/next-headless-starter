@@ -11,6 +11,8 @@ export type RequestOptions = {
   tags: string[];
   /** Send the application password and bypass every cache. Used for draft previews only. */
   auth?: boolean;
+  /** Bypass the Next.js data cache and request dedupe, without credentials. Used by the SEO probe. */
+  noStore?: boolean;
 };
 
 /** Template tag for GraphQL documents. It only concatenates; it exists so editors highlight them. */
@@ -24,11 +26,16 @@ export type WpRequest = <T>(
   options: RequestOptions,
 ) => Promise<T>;
 
+function errorMessage(e: unknown): string {
+  const message = (e as { message?: unknown } | null)?.message;
+  return typeof message === "string" ? message : "Unknown GraphQL error";
+}
+
 export function createClient(opts: WpClientOptions): WpRequest {
   async function send(
     query: string,
     variables: Record<string, unknown>,
-    { tags, auth = false }: RequestOptions,
+    { tags, auth = false, noStore = false }: RequestOptions,
   ): Promise<unknown> {
     const headers: Record<string, string> = { "content-type": "application/json" };
     if (auth) {
@@ -49,12 +56,25 @@ export function createClient(opts: WpClientOptions): WpRequest {
         body: JSON.stringify({ query, variables }),
         // Next.js 16 does not cache fetch by default. A numeric revalidate opts the request in, and
         // the tags let the revalidate webhook purge it. Drafts must never be cached.
-        ...(auth ? { cache: "no-store" as const } : { next: { revalidate: 3600, tags } }),
+        ...(auth || noStore
+          ? { cache: "no-store" as const }
+          : { next: { revalidate: 3600, tags } }),
       });
     } catch (e) {
       throw new ContentError("network", `WPGraphQL request failed: ${(e as Error).message}`, e);
     }
-    if (!res.ok) throw new ContentError("network", `WPGraphQL responded ${res.status}`);
+    if (!res.ok) {
+      // Current WPGraphQL answers validation errors (such as an unknown field) with HTTP 500 and a
+      // GraphQL body. Those are GraphQL errors, not outages, and callers rely on telling them apart.
+      const errors = await res
+        .json()
+        .then((b: unknown) => (b as { errors?: unknown } | null)?.errors)
+        .catch(() => undefined);
+      if (Array.isArray(errors) && errors.length) {
+        throw new ContentError("graphql", errors.map((e) => errorMessage(e)).join("; "));
+      }
+      throw new ContentError("network", `WPGraphQL responded ${res.status}`);
+    }
     let json: { data?: unknown; errors?: { message: string }[] };
     try {
       json = (await res.json()) as typeof json;
@@ -83,7 +103,7 @@ export function createClient(opts: WpClientOptions): WpRequest {
     variables: Record<string, unknown>,
     options: RequestOptions,
   ): Promise<T> {
-    if (options.auth) return (await send(query, variables, options)) as T;
+    if (options.auth || options.noStore) return (await send(query, variables, options)) as T;
     return (await deduped(query, JSON.stringify(variables), JSON.stringify(options.tags))) as T;
   };
 }

@@ -26,11 +26,17 @@ const SEO = gql`
   }
 `;
 
-/** True when the Yoast addon's `PostTypeSEO` type exists in the schema. */
+// An ordinary query rather than introspection: WPGraphQL disables public introspection by default,
+// so `__type` would fail on a stock install. This validates only when the Yoast addon is present;
+// otherwise WordPress rejects it with an error that names the `seo` field.
 export const SEO_PROBE = gql`
-  {
-    __type(name: "PostTypeSEO") {
-      name
+  query SeoProbe {
+    posts(first: 1) {
+      nodes {
+        seo {
+          title
+        }
+      }
     }
   }
 `;
@@ -183,7 +189,11 @@ export const POST_PREVIEW = (seo: boolean) => gql`
 
 export const POSTS = (seo: boolean) => gql`
   query Posts($first: Int!, $after: String) {
-    posts(first: $first, after: $after, where: { status: PUBLISH }) {
+    posts(
+      first: $first
+      after: $after
+      where: { status: PUBLISH, orderby: [{ field: DATE, order: DESC }] }
+    ) {
       pageInfo {
         hasNextPage
         endCursor

@@ -42,9 +42,11 @@ const env = {
   revalidateSecret: undefined,
 };
 
-const withSeo = (c: Call) =>
-  c.query.includes("__type") && { data: { __type: { name: "PostTypeSEO" } } };
-const noSeo = (c: Call) => c.query.includes("__type") && { data: { __type: null } };
+const withSeo = (c: Call) => c.query.includes("SeoProbe") && { data: { posts: { nodes: [] } } };
+const noSeo = (c: Call) =>
+  c.query.includes("SeoProbe") && {
+    errors: [{ message: 'Cannot query field "seo" on type "Post".' }],
+  };
 const nextOf = (c: Call) => (c.init as RequestInit & { next?: { tags: string[] } }).next;
 
 beforeEach(() => {
@@ -87,7 +89,7 @@ describe("pages", () => {
     const page = await src.getPage(["about", "team"]);
     await src.getPage(["about", "team"]);
     expect(page?.path).toBe("/about/team");
-    expect(calls.filter((c) => c.query.includes("__type"))).toHaveLength(1);
+    expect(calls.filter((c) => c.query.includes("SeoProbe"))).toHaveLength(1);
     const pageCalls = calls.filter((c) => c.query.includes("PageByUri"));
     expect(pageCalls[0].variables).toEqual({ uri: "/about/team/" });
     expect(nextOf(pageCalls[0])?.tags).toEqual(["pages", "page:about/team"]);
@@ -194,7 +196,7 @@ describe("posts", () => {
 
   it("fetches perPage * page from the start and keeps the last perPage", async () => {
     const calls = stubWordPress((c) => {
-      if (c.query.includes("__type")) return { data: { __type: null } };
+      if (c.query.includes("SeoProbe")) return noSeo(c);
       if (c.query.includes("offsetPagination"))
         return { data: { posts: { pageInfo: { offsetPagination: { total: 7 } } } } };
       return connection([node(1), node(2), node(3), node(4)], true);
@@ -208,7 +210,7 @@ describe("posts", () => {
 
   it("falls back to counting slugs when offset pagination is not installed", async () => {
     const calls = stubWordPress((c) => {
-      if (c.query.includes("__type")) return { data: { __type: null } };
+      if (c.query.includes("SeoProbe")) return noSeo(c);
       if (c.query.includes("offsetPagination")) {
         return {
           errors: [
@@ -235,9 +237,56 @@ describe("posts", () => {
     expect(calls.filter((c) => c.query.includes("PostsTotal"))).toHaveLength(1);
   });
 
+  it("falls back to counting slugs when POSTS_TOTAL is answered with HTTP 500 and a GraphQL body", async () => {
+    const calls = stubWordPress((c) => {
+      if (c.query.includes("SeoProbe")) return noSeo(c);
+      if (c.query.includes("offsetPagination")) {
+        return Response.json(
+          {
+            errors: [{ message: 'Field "offsetPagination" is not defined by type "WPPageInfo".' }],
+          },
+          { status: 500 },
+        );
+      }
+      if (c.query.includes("PostSlugs")) {
+        return connection([{ slug: "a" }, { slug: "b" }, { slug: "c" }], false);
+      }
+      return connection([node(1), node(2)], true);
+    });
+    const result = await createWordPressSource(env).getPosts({ page: 1, perPage: 2 });
+    expect(result).toMatchObject({ total: 3, totalPages: 2 });
+    expect(calls.some((c) => c.query.includes("PostSlugs"))).toBe(true);
+  });
+
+  it("stops walking when the cursor does not advance, even if hasNextPage stays true", async () => {
+    const calls = stubWordPress((c) => {
+      if (c.query.includes("SeoProbe")) return noSeo(c);
+      return connection([node(1)], true); // endCursor is always "cur"
+    });
+    const slugs = createWordPressSource(env);
+    const result = await slugs.getPosts({ page: 5, perPage: 100 });
+    expect(calls.filter((c) => c.query.includes("Posts("))).toHaveLength(2);
+    expect(result.total).toBe(2);
+  });
+
+  it("stops walking when a page returns no nodes but claims there is more", async () => {
+    const calls = stubWordPress((c) => {
+      if (c.query.includes("PostSlugs")) {
+        return {
+          data: {
+            posts: { pageInfo: { hasNextPage: true, endCursor: `c${calls.length}` }, nodes: [] },
+          },
+        };
+      }
+      return {};
+    });
+    expect(await createWordPressSource(env).getPostSlugs()).toEqual([]);
+    expect(calls).toHaveLength(1);
+  });
+
   it("walks the cursor in batches of 100 for deep pages", async () => {
     const calls = stubWordPress((c) => {
-      if (c.query.includes("__type")) return { data: { __type: null } };
+      if (c.query.includes("SeoProbe")) return noSeo(c);
       if (c.query.includes("offsetPagination"))
         return { data: { posts: { pageInfo: { offsetPagination: { total: 300 } } } } };
       const n = c.variables.first as number;
@@ -296,28 +345,60 @@ describe("preview", () => {
 });
 
 describe("errors and the SEO probe", () => {
-  it("propagates a network failure from the probe and retries on the next call", async () => {
+  const probes = (calls: Call[]) => calls.filter((c) => c.query.includes("SeoProbe"));
+  const pageCall = (calls: Call[]) => calls.find((c) => c.query.includes("PageByUri"))!;
+
+  it("probe success: SEO is present, remembered, and the probe is not cached or tagged", async () => {
+    const calls = stubWordPress((c) => withSeo(c) || pageWithSeo);
+    const src = createWordPressSource(env);
+    await src.getPage(["about"]);
+    await src.getPage(["services"]);
+    expect(probes(calls)).toHaveLength(1);
+    expect(probes(calls)[0].init.cache).toBe("no-store");
+    expect(nextOf(probes(calls)[0])).toBeUndefined();
+    expect(pageCall(calls).query).toContain("metaDesc");
+    expect(console.warn).not.toHaveBeenCalled();
+  });
+
+  it("probe naming the seo field: SEO is absent, remembered, without a warning", async () => {
+    const calls = stubWordPress((c) => noSeo(c) || pageWithSeo);
+    const src = createWordPressSource(env);
+    await src.getPage(["about"]);
+    await src.getPage(["services"]);
+    expect(probes(calls)).toHaveLength(1);
+    expect(pageCall(calls).query).not.toContain("metaDesc");
+    expect(console.warn).not.toHaveBeenCalled();
+  });
+
+  it("probe network error: no SEO for that call, not remembered, warned once", async () => {
     let attempt = 0;
     const calls = stubWordPress((c) => {
-      if (c.query.includes("__type") && attempt++ === 0)
+      if (c.query.includes("SeoProbe") && attempt++ < 2)
         return new Response("nope", { status: 503 });
       return withSeo(c) || pageWithSeo;
     });
     const src = createWordPressSource(env);
-    await expect(src.getPage(["about"])).rejects.toMatchObject({ code: "network" });
     expect((await src.getPage(["about"]))?.title).toContain("Meet the team");
-    expect(calls.filter((c) => c.query.includes("__type"))).toHaveLength(2);
+    expect(pageCall(calls).query).not.toContain("metaDesc");
+    await src.getPage(["services"]); // second failure: still not remembered, no second warning
+    await src.getPage(["team"]); // probe succeeds now
+    expect(probes(calls)).toHaveLength(3);
+    expect(calls.filter((c) => c.query.includes("PageByUri")).at(-1)?.query).toContain("metaDesc");
+    expect(console.warn).toHaveBeenCalledTimes(1);
   });
 
-  it("treats a probe that fails in GraphQL (introspection off) as no SEO and warns", async () => {
+  it("probe with an unrelated GraphQL error: no SEO for that call, not remembered, warned", async () => {
     const calls = stubWordPress((c) =>
-      c.query.includes("__type")
-        ? { errors: [{ message: "GraphQL introspection is not allowed" }] }
+      c.query.includes("SeoProbe")
+        ? { errors: [{ message: "Internal server error" }] }
         : pageWithSeo,
     );
-    await createWordPressSource(env).getPage(["about"]);
+    const src = createWordPressSource(env);
+    await src.getPage(["about"]);
+    await src.getPage(["services"]);
+    expect(probes(calls)).toHaveLength(2);
+    expect(pageCall(calls).query).not.toContain("metaDesc");
     expect(console.warn).toHaveBeenCalledTimes(1);
-    expect(calls.find((c) => c.query.includes("PageByUri"))?.query).not.toContain("metaDesc");
   });
 
   it("maps HTTP errors, GraphQL errors and fetch failures to ContentError codes", async () => {

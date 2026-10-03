@@ -72,25 +72,36 @@ export function createWordPressSource(env: Env): ContentSource {
   const cmsOrigin = originOf(env.wpUrl);
   const mapOpts: MapOptions = cmsOrigin && cmsOrigin !== originOf(SITE_URL) ? { cmsOrigin } : {};
 
-  // Does the schema have the Yoast addon? Asked once per process and the answer reused. A failed
-  // probe is not remembered, so a transient network error does not poison later requests.
+  // Does the schema have the Yoast addon? An ordinary query answers it (introspection is off by
+  // default in WPGraphQL). Only a definite answer is remembered for the process: success means
+  // present, a GraphQL error naming the `seo` field means absent. Anything else (network failure,
+  // unrelated GraphQL error) is not remembered, so the next call asks again; that call runs without
+  // SEO, and the first such failure is logged once.
   let seoProbe: Promise<boolean> | null = null;
+  let warnedProbe = false;
   function hasSeo(): Promise<boolean> {
-    seoProbe ??= request<{ __type: { name: string } | null }>(SEO_PROBE, {}, { tags: [] })
-      .then((d) => d.__type !== null)
+    seoProbe ??= request<unknown>(SEO_PROBE, {}, { tags: [], noStore: true })
+      .then(() => true)
       .catch((e: unknown) => {
-        if (e instanceof ContentError && e.code === "graphql") {
-          // Typically introspection disabled for anonymous users. Run without SEO rather than fail.
-          console.warn(`WPGraphQL SEO probe failed, continuing without Yoast fields: ${e.message}`);
+        if (e instanceof ContentError && e.code === "graphql" && /\bseo\b/i.test(e.message)) {
           return false;
         }
         seoProbe = null;
-        throw e;
+        if (!warnedProbe) {
+          warnedProbe = true;
+          const message = e instanceof Error ? e.message : String(e);
+          console.warn(
+            `WPGraphQL SEO probe inconclusive, running without Yoast fields: ${message}`,
+          );
+        }
+        return false;
       });
     return seoProbe;
   }
 
-  // Walks a cursor connection until `limit` nodes are collected or the connection ends.
+  // Walks a cursor connection until `limit` nodes are collected or the connection ends. A page that
+  // says there is more but returns no nodes, or a cursor that does not advance, ends the walk
+  // instead of looping forever.
   async function collect<T>(
     fetchPage: (first: number, after: string | null) => Promise<Connection<T>>,
     limit = Infinity,
@@ -101,8 +112,10 @@ export function createWordPressSource(env: Env): ContentSource {
     while (hasNextPage && nodes.length < limit) {
       const conn: Connection<T> = await fetchPage(Math.min(PAGE_SIZE, limit - nodes.length), after);
       nodes.push(...conn.nodes);
-      after = conn.pageInfo.endCursor;
-      hasNextPage = conn.pageInfo.hasNextPage && after !== null;
+      const next = conn.pageInfo.endCursor;
+      const stalled = conn.nodes.length === 0 || next === after;
+      after = next;
+      hasNextPage = conn.pageInfo.hasNextPage && after !== null && !stalled;
     }
     return { nodes, hasNextPage };
   }
