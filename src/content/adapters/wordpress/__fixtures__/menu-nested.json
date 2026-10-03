@@ -1,0 +1,58 @@
+{
+  "data": {
+    "generalSettings": { "url": "http://localhost" },
+    "menus": {
+      "nodes": [
+        {
+          "menuItems": {
+            "nodes": [
+              {
+                "id": "m1",
+                "parentId": null,
+                "label": "About",
+                "url": "http://localhost/about/",
+                "target": null
+              },
+              {
+                "id": "m2",
+                "parentId": "m1",
+                "label": "Team",
+                "url": "http://localhost/about/team/",
+                "target": null
+              },
+              {
+                "id": "m3",
+                "parentId": null,
+                "label": "Blog",
+                "url": "http://localhost/blog/",
+                "target": null
+              },
+              {
+                "id": "m4",
+                "parentId": null,
+                "label": "GitHub",
+                "url": "https://github.com/talha55/next-headless-starter",
+                "target": "_blank"
+              },
+              {
+                "id": "m5",
+                "parentId": null,
+                "label": "Q&amp;A",
+                "url": "http://localhost.evil.example/qa",
+                "target": null
+              },
+              {
+                "id": "m6",
+                "parentId": null,
+                "label": "Home",
+                "url": "http://localhost",
+                "target": null
+              },
+              { "id": "m7", "parentId": null, "label": "Jump", "url": "#contact", "target": null }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "data": {
+    "page": {
+      "id": "cGFnZTo2",
+      "uri": "/",
+      "title": "Northfield Studio",
+      "content": "<h2>Websites that are finished</h2><p>Welcome.</p>",
+      "date": "2026-01-05T09:00:00",
+      "dateGmt": "2026-01-05T09:00:00",
+      "modified": "2026-01-05T09:00:00",
+      "modifiedGmt": "2026-01-05T09:00:00",
+      "featuredImage": {
+        "node": {
+          "sourceUrl": "http://localhost/wp-content/uploads/studio.jpg",
+          "altText": null,
+          "mediaDetails": null
+        }
+      },
+      "seo": {
+        "title": "",
+        "metaDesc": "",
+        "canonical": "",
+        "metaRobotsNoindex": "noindex",
+        "opengraphImage": null
+      }
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "data": {
+    "posts": {
+      "pageInfo": { "hasNextPage": true, "endCursor": "YXJyYXljb25uZWN0aW9uOjEwMg==" },
+      "nodes": [
+        {
+          "id": "cG9zdDoxMDE=",
+          "slug": "launching-a-site-in-a-week",
+          "title": "Launching a site in a week",
+          "excerpt": "<p>Here is how we did it.</p>",
+          "date": "2026-08-20T14:00:00",
+          "dateGmt": "2026-08-20T13:00:00",
+          "modified": "2026-08-21T08:00:00",
+          "modifiedGmt": "2026-08-21T07:00:00",
+          "author": { "node": { "name": "Ada Okafor" } },
+          "featuredImage": null,
+          "seo": null
+        },
+        {
+          "id": "cG9zdDoxMDI=",
+          "slug": "choosing-a-headless-cms",
+          "title": "Choosing a headless CMS",
+          "excerpt": "<p>Pick the one your editors can use.</p>",
+          "date": "2026-07-01T09:00:00",
+          "dateGmt": "2026-07-01T08:00:00",
+          "modified": "2026-07-01T09:00:00",
+          "modifiedGmt": "2026-07-01T08:00:00",
+          "author": null,
+          "featuredImage": null,
+          "seo": null
+        }
+      ]
+    }
+  }
+}
