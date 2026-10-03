@@ -6,6 +6,12 @@ vi.mock("next/headers", () => ({
 }));
 import { GET } from "./route";
 
+/** The decoded value of the preview_id cookie the response sets. */
+function previewCookie(res: Response) {
+  const match = /preview_id=([^;]*)/.exec(res.headers.get("set-cookie") ?? "");
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
 function req(qs: string) {
   return new Request("http://localhost/api/preview?" + qs);
 }
@@ -64,7 +70,7 @@ describe("GET /api/preview", () => {
     expect(res.headers.get("location")).toBe("http://localhost/blog/hello");
     expect(enable).toHaveBeenCalledOnce();
     const cookie = res.headers.get("set-cookie") ?? "";
-    expect(cookie).toContain("preview_id=12");
+    expect(previewCookie(res)).toBe("post:12:/blog/hello");
     expect(cookie).toContain("HttpOnly");
     expect(cookie.toLowerCase()).toContain("samesite=lax");
     expect(cookie).not.toContain("Secure");
@@ -73,10 +79,12 @@ describe("GET /api/preview", () => {
     const res = await GET(req("secret=s&type=page&id=3&slug=about%2Fteam"));
     expect(res.status).toBe(307);
     expect(res.headers.get("location")).toBe("http://localhost/about/team");
+    expect(previewCookie(res)).toBe("page:3:/about/team");
   });
   it("redirects the front page slug home to the site root", async () => {
     const res = await GET(req("secret=s&type=page&id=1&slug=home"));
     expect(res.status).toBe(307);
     expect(res.headers.get("location")).toBe("http://localhost/");
+    expect(previewCookie(res)).toBe("page:1:/");
   });
 });

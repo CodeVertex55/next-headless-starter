@@ -85,7 +85,7 @@ The preview URL has this format:
 - `slug` may contain letters, digits, hyphens and `/`. Underscores and non-ASCII slugs are rejected.
 - A post opens at `/blog/<slug>` and a page at `/<slug>`.
 
-The route enables Next.js draft mode and sets a `preview_id` cookie, so the page loads the draft by id. Exit preview at `/api/preview/exit`.
+The route enables Next.js draft mode and sets a `preview_id` cookie that names the item and the path it opens at, so that page loads the draft by id. Other pages you visit while previewing show their published versions. Exit preview at `/api/preview/exit`.
 
 Behind a TLS-terminating proxy that forwards plain http to Next.js, the preview cookie is not marked Secure. Set the proxy to forward the original protocol, for example with the `X-Forwarded-Proto` header.
 

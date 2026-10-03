@@ -37,7 +37,9 @@ export async function GET(request: Request) {
   const dm = await draftMode();
   dm.enable();
   const res = NextResponse.redirect(destination, 307);
-  res.cookies.set("preview_id", id, {
+  // The cookie names the item being previewed and where it lives, so the loaders pass the id only
+  // when rendering that path. Browsing to another page during preview shows its published version.
+  res.cookies.set("preview_id", `${type}:${id}:${target}`, {
     httpOnly: true,
     sameSite: "lax",
     path: "/",
