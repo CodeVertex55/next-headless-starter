@@ -3,6 +3,9 @@ import { draftMode } from "next/headers";
 import { NextResponse } from "next/server";
 import { getEnv } from "@/lib/env";
 
+const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*(?:\/[a-z0-9]+(?:-[a-z0-9]+)*)*$/i;
+const WP_ID = /^\d+$/;
+
 function secretMatches(given: string | null, expected: string): boolean {
   if (given === null) return false;
   const a = Buffer.from(given);
@@ -23,10 +26,16 @@ export async function GET(request: Request) {
   if (!type || !id || !slug || !["post", "page"].includes(type)) {
     return NextResponse.json({ error: "type, id and slug are required" }, { status: 400 });
   }
+  if (!SLUG.test(slug)) return NextResponse.json({ error: "invalid slug" }, { status: 400 });
+  if (!WP_ID.test(id)) return NextResponse.json({ error: "invalid id" }, { status: 400 });
+  const target = type === "post" ? `/blog/${slug}` : `/${slug}`;
+  const destination = new URL(target, url.origin);
+  if (destination.origin !== url.origin) {
+    return NextResponse.json({ error: "invalid slug" }, { status: 400 });
+  }
   const dm = await draftMode();
   dm.enable();
-  const target = type === "post" ? `/blog/${slug}` : `/${slug}`;
-  const res = NextResponse.redirect(new URL(target, url.origin), 307);
+  const res = NextResponse.redirect(destination, 307);
   res.cookies.set("preview_id", id, {
     httpOnly: true,
     sameSite: "lax",
