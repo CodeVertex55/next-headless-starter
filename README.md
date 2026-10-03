@@ -18,7 +18,7 @@ Demo: [next-headless-starter.vercel.app](https://next-headless-starter.vercel.ap
 
 ## Quick start
 
-The default content source is the fixture adapter. You need Node.js 20.9 or later.
+The default content source is the fixture adapter. You need Node.js 22 or later.
 
 ```bash
 npm install
@@ -26,7 +26,7 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Open `http://localhost:3000`. You see Northfield Studio, a sample site with six pages and eight posts. No WordPress is needed.
+Open `http://localhost:3000`. You see Northfield Studio, a sample site with seven pages and eight posts. No WordPress is needed.
 
 ## Connect WordPress
 

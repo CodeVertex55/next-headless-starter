@@ -1,0 +1,18 @@
+{
+  "id": "page-privacy",
+  "slug": ["privacy"],
+  "title": "Privacy",
+  "excerpt": "What Northfield Studio collects when you use this site or write to us, and what we do with it.",
+  "html": "<h2>What we collect</h2>\n<p>This site does not use tracking cookies or third-party analytics. Our web host keeps standard server logs, such as your IP address and the pages you request, for up to thirty days so we can keep the site secure and running.</p>\n<p>When you email or phone us, we keep your name, contact details and what you tell us about your project, so we can reply and, if we work together, run the project.</p>\n<h2>How we use it</h2>\n<ul><li>To answer your enquiry and run any project we agree on.</li><li>To send invoices and keep the records the law requires.</li><li>Never for advertising, and we never sell or share it with marketers.</li></ul>\n<h2>How long we keep it</h2>\n<p>Enquiries that do not become a project are deleted after twelve months. Client records are kept for as long as tax rules require, then deleted.</p>\n<h2>Your rights</h2>\n<p>You can ask to see, correct or delete what we hold about you at any time. Write to <a href=\"mailto:hello@example.com\">hello@example.com</a> and we will reply within one month.</p>",
+  "publishedAt": "2026-01-25T09:00:00Z",
+  "updatedAt": "2026-06-20T09:00:00Z",
+  "featuredImage": null,
+  "seo": {
+    "title": "Privacy notice",
+    "absoluteTitle": false,
+    "description": "What Northfield Studio collects when you use this site or write to us, and what we do with it.",
+    "canonical": null,
+    "noindex": false,
+    "ogImage": null
+  }
+}

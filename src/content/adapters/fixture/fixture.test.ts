@@ -15,3 +15,13 @@ describe("fixture adapter", () => {
     }
   });
 });
+
+describe("fixture pages", () => {
+  it("includes the privacy page the footer links to", async () => {
+    const src = createFixtureSource();
+    expect(await src.getPageSlugs()).toContainEqual(["privacy"]);
+    const page = await src.getPage(["privacy"]);
+    expect(page?.path).toBe("/privacy");
+    expect(page?.seo.title).toBeTruthy();
+  });
+});

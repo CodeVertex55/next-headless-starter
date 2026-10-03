@@ -10,6 +10,7 @@ import type {
 } from "@/content/types";
 import { SITE_URL } from "@/lib/site";
 import { sanitizeHtml } from "@/lib/html";
+import { isReservedPageSlug } from "@/content/reserved";
 import site from "./data/site.json";
 import menus from "./data/menus.json";
 import pageHome from "./data/pages/home.json";
@@ -18,6 +19,7 @@ import pageAboutTeam from "./data/pages/about/team.json";
 import pageServices from "./data/pages/services.json";
 import pageWebDesign from "./data/pages/services/web-design.json";
 import pageContact from "./data/pages/contact.json";
+import pagePrivacy from "./data/pages/privacy.json";
 import post01 from "./data/posts/launching-a-site-in-a-week.json";
 import post02 from "./data/posts/choosing-a-headless-cms.json";
 import post03 from "./data/posts/what-a-design-system-actually-costs.json";
@@ -37,6 +39,7 @@ const rawPages = [
   pageServices,
   pageWebDesign,
   pageContact,
+  pagePrivacy,
 ] as RawPage[];
 
 const rawPosts = [post01, post02, post03, post04, post05, post06, post07, post08] as RawPost[];
@@ -68,7 +71,7 @@ export function createFixtureSource(): ContentSource {
       return pages.find((p) => p.slug.join("/") === slug.join("/")) ?? null;
     },
     async getPageSlugs() {
-      return pages.map((p) => p.slug);
+      return pages.map((p) => p.slug).filter((slug) => !isReservedPageSlug(slug));
     },
     async getPost(slug) {
       return posts.find((p) => p.slug === slug) ?? null;

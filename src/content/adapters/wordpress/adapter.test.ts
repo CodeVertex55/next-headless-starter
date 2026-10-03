@@ -120,6 +120,27 @@ describe("pages", () => {
     expect(nextOf(calls[2])?.tags).toEqual(["pages", "page:home"]);
   });
 
+  it("leaves pages under the reserved blog and api segments out of the slugs", async () => {
+    stubWordPress(() => ({
+      data: {
+        pages: {
+          pageInfo: { hasNextPage: false, endCursor: null },
+          nodes: [
+            { uri: "/blog/" },
+            { uri: "/blog/archive/" },
+            { uri: "/api/" },
+            { uri: "/about/blog/" },
+            { uri: "/blogging/" },
+          ],
+        },
+      },
+    }));
+    expect(await createWordPressSource(env).getPageSlugs()).toEqual([
+      ["about", "blog"],
+      ["blogging"],
+    ]);
+  });
+
   it("lists page slugs across cursor pages, mapping / to home", async () => {
     const calls = stubWordPress((c) =>
       c.variables.after === null

@@ -240,7 +240,7 @@ The sitemap reads every page and post individually. A large site may want a dedi
 ## Troubleshooting
 
 - Every page shows an error: check that the `primary` and `footer` menu locations are registered.
-- Preview returns 401: `secret` does not match `PREVIEW_SECRET`.
+- Preview returns 401: `secret` does not match `PREVIEW_SECRET`, or `PREVIEW_SECRET` is not set in the Next.js environment. The route rejects every request when it is unset.
 - Preview shows a 404 or an error: check `WP_APP_USER` and `WP_APP_PASSWORD`, and that `id` is the right database id.
 - Revalidation returns 401: the Bearer token does not match `REVALIDATE_SECRET`.
 - Edits take an hour to appear: the webhook is not reaching the site. Check the URL and secret in the snippet constants.

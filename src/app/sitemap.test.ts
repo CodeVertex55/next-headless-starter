@@ -5,6 +5,7 @@ describe("sitemap", () => {
     const entries = await sitemap();
     const urls = entries.map((e) => e.url);
     expect(urls.some((u) => u.endsWith("/about/team"))).toBe(true);
+    expect(urls.some((u) => u.endsWith("/privacy"))).toBe(true);
     expect(urls.some((u) => u.endsWith("/blog"))).toBe(true);
     expect(urls.filter((u) => u.includes("/blog/")).length).toBeGreaterThanOrEqual(8);
     expect(urls.some((u) => u.endsWith("/home"))).toBe(false);

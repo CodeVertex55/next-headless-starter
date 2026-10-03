@@ -26,6 +26,10 @@ export function runContractTests(name: string, make: () => Promise<ContentSource
       expect(page?.html).not.toMatch(/<script/i);
       expect(page?.seo.title).toBeTruthy();
     });
+    it("leaves pages under the app's reserved blog and api segments out of the slugs", async () => {
+      const slugs = await (await make()).getPageSlugs();
+      for (const slug of slugs) expect(["blog", "api"]).not.toContain(slug[0]);
+    });
     it("returns null for a missing page", async () => {
       expect(await (await make()).getPage(["definitely", "missing"])).toBeNull();
     });

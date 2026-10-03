@@ -1,5 +1,6 @@
 import { unstable_rethrow } from "next/navigation";
 import { ContentError } from "@/content/errors";
+import { isReservedPageSlug } from "@/content/reserved";
 import type { ContentSource } from "@/content/source";
 import type { MenuLocation, PostSummary } from "@/content/types";
 import type { getEnv } from "@/lib/env";
@@ -220,7 +221,7 @@ export function createWordPressSource(env: Env): ContentSource {
         if (!n.uri) continue;
         const slug = slugFromUri(n.uri);
         const key = slug.join("/");
-        if (seen.has(key)) continue;
+        if (seen.has(key) || isReservedPageSlug(slug)) continue;
         seen.add(key);
         slugs.push(slug);
       }
