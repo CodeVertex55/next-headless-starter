@@ -4,12 +4,13 @@ import type { NextConfig } from "next";
 // same install that serves /wp-content/uploads.
 const wp = process.env.WP_GRAPHQL_URL ? new URL(process.env.WP_GRAPHQL_URL) : null;
 
-// Next.js refuses to optimise images from private addresses. A WordPress on this machine (such as
-// the documented XAMPP setup) needs that allowed, but only in development: in production it would
-// open the image optimiser to requests against the local network.
+// Next.js refuses to optimise images from private addresses, so a WordPress on this machine (for
+// example the setup in docs/local-wordpress.md) needs that allowed. It is allowed whenever the
+// WordPress host is loopback, in any NODE_ENV, because `remotePatterns` below already pins that
+// exact host and port, and running WordPress on loopback is the operator's own choice. It is never
+// allowed for any other host.
 const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1", "[::1]"]);
-const allowLocalWordPress =
-  wp !== null && LOCAL_HOSTS.has(wp.hostname) && process.env.NODE_ENV !== "production";
+const allowLocalWordPress = wp !== null && LOCAL_HOSTS.has(wp.hostname);
 
 const nextConfig: NextConfig = {
   images: {
