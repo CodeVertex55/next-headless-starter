@@ -2,6 +2,11 @@ export type Image = { src: string; alt: string; width: number; height: number };
 
 export type SeoFields = {
   title: string;
+  /**
+   * True when `title` is already a complete document title (for example one written by an SEO
+   * plugin, which includes the site name), so the layout's "%s | Site" template must not apply.
+   */
+  absoluteTitle: boolean;
   description: string;
   canonical: string | null;
   noindex: boolean;

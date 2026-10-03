@@ -8,6 +8,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata({
     seo: {
       title: "Blog",
+      absoluteTitle: false,
       description: settings.description,
       canonical: null,
       noindex: false,

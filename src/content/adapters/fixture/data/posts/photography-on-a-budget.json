@@ -14,6 +14,7 @@
   "html": "<p>Nothing lifts a small business site like honest photography, and nothing drags one down like obvious stock images. The good news is that a modern phone and a few habits get you most of the way there.</p>\n<h2>Light is the whole game</h2>\n<p>Shoot near a window, in the morning or late afternoon, and turn the overhead lights off. Soft, side-on daylight flatters food, products and people alike. Avoid the on-camera flash entirely.</p>\n<h2>A short shot list</h2>\n<ul><li>The front of your premises, from across the street</li><li>You and your team at work, not posed in a row</li><li>Close-ups of the thing you make or do</li><li>One or two photos that show your customers using it, with permission</li></ul>\n<figure class=\"wp-block-image\"><img src=\"/fixture/post-3.jpg\" alt=\"A phone propped on a stack of books to photograph a loaf of bread\" width=\"1200\" height=\"800\" loading=\"lazy\"><figcaption>A stack of books is a perfectly good tripod.</figcaption></figure>\n<h2>Before you upload</h2>\n<p>Crop to a consistent shape, keep the long edge under 2000 pixels, and run each file through a compression tool. We handle resizing and modern formats automatically on our builds, but a tidy original makes everything downstream better.</p>\n<blockquote><p>People do not need perfect photos. They need real ones.</p></blockquote>",
   "seo": {
     "title": "Photography on a small budget",
+    "absoluteTitle": false,
     "description": "How to get trustworthy website photos without a studio shoot.",
     "canonical": null,
     "noindex": false,

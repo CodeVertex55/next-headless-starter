@@ -14,6 +14,7 @@
   },
   "seo": {
     "title": "Northfield Studio | Web design and build for small businesses",
+    "absoluteTitle": false,
     "description": "A small design and build studio making fast, plain-spoken websites for independent businesses.",
     "canonical": null,
     "noindex": false,

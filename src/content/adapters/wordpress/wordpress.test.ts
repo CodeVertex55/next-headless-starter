@@ -51,6 +51,7 @@ describe("mapPage", () => {
     expect(page.title).toBe("Meet the team & our values");
     expect(page.seo).toEqual({
       title: "Meet the team | Northfield Studio",
+      absoluteTitle: true,
       description: "Four people who design and build small-business websites.",
       canonical: "http://localhost/about/team/",
       noindex: false,
@@ -91,6 +92,7 @@ describe("mapPage", () => {
     );
     expect(page.seo).toEqual({
       title: "Privacy",
+      absoluteTitle: false,
       description: page.excerpt,
       canonical: null,
       noindex: false,
@@ -139,6 +141,7 @@ describe("mapSeo", () => {
     };
     expect(mapSeo(blank, fallback)).toEqual({
       title: "T",
+      absoluteTitle: false,
       description: "E",
       canonical: null,
       noindex: false,
@@ -147,7 +150,18 @@ describe("mapSeo", () => {
   });
   it("handles a missing seo object", () => {
     expect(mapSeo(undefined, fallback).title).toBe("T");
+    expect(mapSeo(undefined, fallback).absoluteTitle).toBe(false);
     expect(mapSeo(null, fallback).noindex).toBe(false);
+  });
+  it("marks a title from the SEO plugin as absolute, after decoding entities", () => {
+    const seo = {
+      title: "Q&amp;A | Site",
+      metaDesc: null,
+      canonical: null,
+      metaRobotsNoindex: null,
+      opengraphImage: null,
+    };
+    expect(mapSeo(seo, fallback)).toMatchObject({ title: "Q&A | Site", absoluteTitle: true });
   });
 });
 

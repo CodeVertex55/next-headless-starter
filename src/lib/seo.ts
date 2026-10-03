@@ -35,7 +35,7 @@ export function buildMetadata({
         },
       ];
   return {
-    title: seo.title,
+    title: seo.absoluteTitle ? { absolute: seo.title } : seo.title,
     description: seo.description,
     alternates: { canonical },
     robots: seo.noindex ? { index: false, follow: false } : { index: true, follow: true },
@@ -64,7 +64,7 @@ export function organizationJsonLd(s: SiteSettings) {
     "@type": "Organization",
     name: s.name,
     url: s.url,
-    ...(s.logo ? { logo: s.logo.src } : {}),
+    ...(s.logo ? { logo: absoluteUrl(s.logo.src, s.url) } : {}),
   };
 }
 export function articleJsonLd(
@@ -86,7 +86,7 @@ export function articleJsonLd(
     datePublished: p.publishedAt,
     dateModified: p.updatedAt,
     ...(p.author ? { author: { "@type": "Person", name: p.author } } : {}),
-    ...(p.featuredImage ? { image: [p.featuredImage.src] } : {}),
+    ...(p.featuredImage ? { image: [absoluteUrl(p.featuredImage.src, s.url)] } : {}),
     publisher: { "@type": "Organization", name: s.name },
   };
 }

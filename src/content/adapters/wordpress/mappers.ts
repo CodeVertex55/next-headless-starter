@@ -157,8 +157,11 @@ export function mapSeo(
     canonicalRaw && opts.cmsOrigin && originOf(canonicalRaw) === originOf(opts.cmsOrigin)
       ? null
       : canonicalRaw;
+  // A Yoast title is a full document title that already carries the site name.
+  const seoTitle = decodeEntities(seo?.title?.trim() ?? "");
   return {
-    title: decodeEntities(seo?.title?.trim() ?? "") || fallback.title,
+    title: seoTitle || fallback.title,
+    absoluteTitle: seoTitle !== "",
     description: decodeEntities(seo?.metaDesc?.trim() ?? "") || fallback.excerpt,
     canonical,
     noindex: seo?.metaRobotsNoindex === "noindex",

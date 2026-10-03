@@ -13,7 +13,8 @@
     "height": 800
   },
   "seo": {
-    "title": "Services | Northfield Studio",
+    "title": "Services",
+    "absoluteTitle": false,
     "description": "Web design, development and care plans for small businesses, all at fixed prices.",
     "canonical": null,
     "noindex": false,

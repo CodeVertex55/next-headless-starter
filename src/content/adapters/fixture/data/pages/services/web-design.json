@@ -13,7 +13,8 @@
     "height": 800
   },
   "seo": {
-    "title": "Web design | Northfield Studio",
+    "title": "Web design",
+    "absoluteTitle": false,
     "description": "A four-step design process: workshop, content structure, visual design and a clickable prototype.",
     "canonical": null,
     "noindex": false,

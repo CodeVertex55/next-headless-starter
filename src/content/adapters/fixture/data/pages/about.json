@@ -14,6 +14,7 @@
   },
   "seo": {
     "title": "About Northfield Studio",
+    "absoluteTitle": false,
     "description": "Who we are and how we work.",
     "canonical": null,
     "noindex": false,

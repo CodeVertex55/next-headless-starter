@@ -9,6 +9,7 @@
   "featuredImage": null,
   "seo": {
     "title": "Contact Northfield Studio",
+    "absoluteTitle": false,
     "description": "Tell us about your project. We reply within one working day.",
     "canonical": null,
     "noindex": false,

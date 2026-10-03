@@ -27,6 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildMetadata({
     seo: {
       title: `Blog (page ${page})`,
+      absoluteTitle: false,
       description: settings.description,
       canonical: null,
       noindex: false,
