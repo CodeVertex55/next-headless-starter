@@ -1,6 +1,6 @@
 # WordPress setup
 
-This guide covers everything WordPress needs to feed this starter. For a local install on Windows, see [local-wordpress.md](local-wordpress.md).
+This guide covers everything WordPress needs to feed this starter. For a local install, see [local-wordpress.md](local-wordpress.md).
 
 ## Requirements
 

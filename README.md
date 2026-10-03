@@ -220,7 +220,7 @@ src/
       fixture/    Sample site data and adapter
       wordpress/  WPGraphQL client, queries, mappers and adapter
   lib/            Environment, site constants, SEO builders and the HTML sanitiser
-docs/             WordPress setup and local XAMPP guides
+docs/             WordPress setup and local WordPress guides
 ```
 
 ## Adding an adapter
