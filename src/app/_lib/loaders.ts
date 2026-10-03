@@ -1,11 +1,14 @@
-import { draftMode } from "next/headers";
+import { cookies, draftMode } from "next/headers";
 import { notFound } from "next/navigation";
 import { getContentSource } from "@/content/source";
+import type { PreviewContext } from "@/content/types";
 import { POSTS_PER_PAGE } from "@/lib/site";
 
-async function preview() {
+async function preview(): Promise<PreviewContext | undefined> {
   const dm = await draftMode();
-  return dm.isEnabled ? { secretVerified: true as const } : undefined;
+  if (!dm.isEnabled) return undefined;
+  const id = (await cookies()).get("preview_id")?.value;
+  return id ? { secretVerified: true, id } : { secretVerified: true };
 }
 export async function loadPage(slug: string[]) {
   const page = await (await getContentSource()).getPage(slug, { preview: await preview() });
