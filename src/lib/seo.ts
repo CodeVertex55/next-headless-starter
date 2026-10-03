@@ -26,7 +26,14 @@ export function buildMetadata({
           alt: seo.ogImage.alt,
         },
       ]
-    : undefined;
+    : [
+        {
+          url: absoluteUrl("/opengraph-image", settings.url),
+          width: 1200,
+          height: 630,
+          alt: settings.name,
+        },
+      ];
   return {
     title: seo.title,
     description: seo.description,
@@ -41,7 +48,7 @@ export function buildMetadata({
       images,
     },
     twitter: {
-      card: images ? "summary_large_image" : "summary",
+      card: "summary_large_image",
       title: seo.title,
       description: seo.description,
     },

@@ -22,6 +22,18 @@ describe("seo", () => {
     expect(m.robots).toEqual({ index: false, follow: false });
     expect(m.alternates?.canonical).toBe("https://x.com/y");
   });
+  it("falls back to the default Open Graph image when ogImage is null", () => {
+    const m = buildMetadata({ seo, path: "/about", settings });
+    const images = m.openGraph?.images as { url: string }[];
+    expect(images[0].url.endsWith("/opengraph-image")).toBe(true);
+    expect((m.twitter as { card?: string }).card).toBe("summary_large_image");
+  });
+  it("uses the explicit ogImage when provided", () => {
+    const ogImage = { src: "https://cdn.example.com/x.png", width: 800, height: 400, alt: "X" };
+    const m = buildMetadata({ seo: { ...seo, ogImage }, path: "/about", settings });
+    const images = m.openGraph?.images as { url: string }[];
+    expect(images[0].url).toBe(ogImage.src);
+  });
   it("produces Article json-ld", () => {
     const ld = articleJsonLd(
       {
