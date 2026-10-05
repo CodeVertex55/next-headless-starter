@@ -14,7 +14,7 @@
     { "label": "Privacy", "href": "/privacy", "external": false, "children": [] },
     {
       "label": "GitHub",
-      "href": "https://github.com/talha55/next-headless-starter",
+      "href": "https://github.com/CodeVertex55/next-headless-starter",
       "external": true,
       "children": []
     }

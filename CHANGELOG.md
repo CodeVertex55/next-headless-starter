@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- The repository moved to github.com/CodeVertex55 after a GitHub account rename. The sample site's footer link and the docs point at the new address. The old address still redirects.
+
 ## 1.0.0 (2026-10-03)
 
 First release. Requires Node.js 22 or later.
